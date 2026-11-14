@@ -27,15 +27,17 @@ header {
 }
 
 .logo {
-    font-size: 30px;
-    font-weight: 800;
-    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
 }
 
-.logo span {
-    background: linear-gradient(110deg,#00d879,#00c9d5);
-    -webkit-background-clip: text;
-    color: transparent;
+.logo img {
+    display: block;
+    width: 220px;
+    max-width: 42vw;
+    height: auto;
+    object-fit: contain;
 }
 
 nav a {
@@ -231,9 +233,9 @@ footer span {
 <body>
 
 <header>
-    <div class="logo">
-        <span>G</span>ET<span>E</span>AS
-    </div>
+    <a href="#home" class="logo">
+    <img src="geteas-logo.png" alt="GETEAS Logo">
+</a>
 
     <nav>
         <a href="#home">Home</a>
