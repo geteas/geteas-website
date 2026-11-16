@@ -325,6 +325,10 @@ const SUPABASE_URL='https://jrlesafvdwwxrahtocqa.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_JJnuK_K5Ji2T1h879q8agw_HGRGJ5O6';
 const db=window.supabase?.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 
+/* GETEAS FEEDBACK EMAIL */
+
+const FEEDBACK_EMAIL = 'YOUR_EMAIL_HERE';
+  
 let products=[],currentResults=[],baseResults=[],currentProduct=null;
 let recent=[],wishlist=[],compareList=[],recentViewed=[];
 
@@ -1017,15 +1021,27 @@ $('simpleTitle').textContent='Feedback';
 $('simpleContent').innerHTML=`
 <div class="form-panel">
 <h2>Help us improve GETEAS</h2>
+
 <form id="feedbackForm">
-<label>Your feedback</label>
-<textarea id="feedbackText" required placeholder="Write your suggestions or complaints…"></textarea>
-<label>Your rating</label>
+
+<label>Your Suggestions / Feedback</label>
+
+<textarea id="feedbackText"
+required
+placeholder="Share your suggestions or feedback..."></textarea>
+
+<label>Your Rating</label>
+
 <div class="stars" id="ratingStars">
-${[1,2,3,4,5].map(n=>`<button type="button" data-rating="${n}">★</button>`).join('')}
+${[1,2,3,4,5].map(n=>`
+<button type="button" data-rating="${n}">★</button>
+`).join('')}
 </div>
-<button class="primary-action" type="submit">Send Feedback</button>
-<p class="empty-note">Feedback submission is not connected yet.</p>
+
+<button class="primary-action" type="submit">
+Submit Feedback
+</button>
+
 </form>
 </div>`;
 
@@ -1033,16 +1049,32 @@ let r=0;
 
 document.querySelectorAll('#ratingStars button').forEach(b=>{
 b.onclick=()=>{
-r=+b.dataset.rating;
+r=Number(b.dataset.rating);
+
 document.querySelectorAll('#ratingStars button').forEach(s=>{
-s.classList.toggle('on',+s.dataset.rating<=r);
+s.classList.toggle('on',Number(s.dataset.rating)<=r);
 });
 };
 });
 
 $('feedbackForm').onsubmit=e=>{
 e.preventDefault();
-toast('Feedback service is not connected yet.');
+
+if(!r){
+toast('Please select a rating.');
+return;
+}
+
+const feedback=$('feedbackText').value;
+
+const subject=encodeURIComponent('GETEAS Customer Feedback');
+
+const body=encodeURIComponent(
+'Rating: '+r+'/5\n\nFeedback:\n'+feedback
+);
+
+window.location.href=
+`mailto:${FEEDBACK_EMAIL}?subject=${subject}&body=${body}`;
 };
 
 }
