@@ -1186,35 +1186,7 @@ $('themeToggle').click();
 }
 
 /* LANGUAGE */
-const translations={
-en:['Home','Categories','Wishlist','Feedback','About Us','Search','Search products...'],
-ml:['ഹോം','വിഭാഗങ്ങൾ','ആഗ്രഹപ്പട്ടിക','അഭിപ്രായം','ഞങ്ങളെക്കുറിച്ച്','തിരയുക','ഉൽപ്പന്നങ്ങൾ തിരയുക...']
-};
 
-function setLanguage(lang){
-
-const t=translations[lang]||translations.en;
-const icons=['⌂','▦','♡','✉','ⓘ'];
-
-document.querySelectorAll('.nav button').forEach((b,i)=>{
-b.innerHTML=`<span class="ico">${icons[i]}</span>${t[i]}`;
-});
-
-$('searchBtn').textContent=t[5];
-input.placeholder=t[6];
-
-document.documentElement.lang=lang;
-}
-
-$('languageSelect').onchange=e=>{
-setLanguage(e.target.value);
-save('geteas_language',e.target.value);
-};
-
-const lang=localStorage.getItem('geteas_language')||'en';
-
-$('languageSelect').value=lang;
-setLanguage(lang);
 
 /* INITIALISE */
 renderHome();
