@@ -18,9 +18,7 @@
     --shadow:0 0 22px #00d6a333;
 }
 
-* {
-    box-sizing:border-box;
-}
+* { box-sizing:border-box; }
 
 body {
     margin:0;
@@ -30,14 +28,8 @@ body {
     min-height:100vh;
 }
 
-button,input,select {
-    font:inherit;
-}
-
-button {
-    cursor:pointer;
-    color:inherit;
-}
+button,input,select { font:inherit; }
+button { cursor:pointer; color:inherit; }
 
 .topbar {
     height:60px;
@@ -50,14 +42,8 @@ button {
     background:#00140e;
 }
 
-.tagline {
-    font-size:16px;
-    font-style:italic;
-}
-
-.tagline b {
-    color:var(--cyan);
-}
+.tagline { font-size:16px; font-style:italic; }
+.tagline b { color:var(--cyan); }
 
 .top-actions {
     position:absolute;
@@ -68,8 +54,18 @@ button {
     color:#e9fff8;
 }
 
-.top-actions span {
+.top-actions button {
+    background:transparent;
+    border:0;
     font-size:22px;
+}
+
+.top-actions select {
+    background:#00251a;
+    color:white;
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:5px;
 }
 
 .top-actions .divider {
@@ -80,7 +76,7 @@ button {
 
 .layout {
     display:grid;
-    grid-template-columns:220px 1fr;
+    grid-template-columns:200px 1fr;
     min-height:calc(100vh - 60px);
 }
 
@@ -123,12 +119,12 @@ button {
     border:0;
     background:transparent;
     text-align:left;
-    padding:0 24px;
+    padding:0 20px;
     border-radius:19px;
     font-size:17px;
     display:flex;
     align-items:center;
-    gap:24px;
+    gap:20px;
 }
 
 .nav button .ico {
@@ -170,9 +166,7 @@ main {
     box-shadow:inset 0 0 12px #00b98b18;
 }
 
-.search-icon {
-    font-size:31px;
-}
+.search-icon { font-size:31px; }
 
 .searchbox input {
     background:transparent;
@@ -184,9 +178,7 @@ main {
     min-width:0;
 }
 
-.searchbox input::placeholder {
-    color:#d0ded9;
-}
+.searchbox input::placeholder { color:#d0ded9; }
 
 .search-btn {
     background:var(--cyan);
@@ -206,7 +198,7 @@ main {
     top:64px;
     left:0;
     width:min(950px,100%);
-    background:#00251feF;
+    background:#00251fef;
     border:1px solid var(--cyan);
     border-radius:23px;
     padding:20px 24px;
@@ -215,9 +207,7 @@ main {
     display:none;
 }
 
-.search-panel.show {
-    display:block;
-}
+.search-panel.show { display:block; }
 
 .panel-heading {
     display:flex;
@@ -250,10 +240,7 @@ main {
     background:#07352b;
 }
 
-.suggestion-list {
-    display:grid;
-    gap:2px;
-}
+.suggestion-list { display:grid; gap:2px; }
 
 .suggestion {
     border:0;
@@ -264,32 +251,7 @@ main {
     font-size:16px;
 }
 
-.suggestion:hover {
-    background:#0a5545;
-}
-
-.trend-mini {
-    display:flex;
-    gap:12px;
-    overflow:auto;
-}
-
-.mini {
-    width:130px;
-    min-width:130px;
-    background:#003629;
-    border:1px solid #176b55;
-    border-radius:15px;
-    padding:10px;
-    text-align:center;
-    font-size:13px;
-}
-
-.mini img {
-    height:60px;
-    width:100%;
-    object-fit:contain;
-}
+.suggestion:hover { background:#0a5545; }
 
 .section-title {
     display:flex;
@@ -298,10 +260,7 @@ main {
     margin:18px 0 14px;
 }
 
-.section-title h2 {
-    font-size:27px;
-    margin:0;
-}
+.section-title h2 { font-size:27px; margin:0; }
 
 .trend-icon {
     font-size:35px;
@@ -317,7 +276,8 @@ main {
     font-weight:700;
 }
 
-/* HOME: automatically creates as many rows as required */
+/* HOME PRODUCT GRID */
+
 .product-grid {
     display:grid;
     grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
@@ -348,7 +308,18 @@ main {
     object-fit:contain;
     display:block;
     margin:0 auto 4px;
-    mix-blend-mode:screen;
+}
+
+.image-empty {
+    width:100%;
+    height:115px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--muted);
+    border-bottom:1px solid #176b55;
+    margin-bottom:8px;
+    font-size:13px;
 }
 
 .card-name {
@@ -366,10 +337,7 @@ main {
     margin-bottom:5px;
 }
 
-.rating {
-    font-size:15px;
-    color:#f5f5e9;
-}
+.rating { font-size:15px; color:#f5f5e9; }
 
 .star {
     color:#ffc928;
@@ -406,6 +374,8 @@ main {
     margin-right:8px;
 }
 
+/* SEARCH RESULTS */
+
 .results-head {
     display:flex;
     justify-content:space-between;
@@ -413,10 +383,7 @@ main {
     margin:4px 0 12px;
 }
 
-.results-head h2 {
-    font-size:20px;
-    margin:0;
-}
+.results-head h2 { font-size:20px; margin:0; }
 
 .sort {
     background:#00251c;
@@ -446,9 +413,7 @@ main {
     margin-bottom:13px;
 }
 
-.filter-group:last-child {
-    border:0;
-}
+.filter-group:last-child { border:0; }
 
 .filter-title {
     font-weight:800;
@@ -462,12 +427,8 @@ main {
     margin:9px 0;
 }
 
-.filters input {
-    accent-color:var(--cyan);
-    margin-right:8px;
-}
+.filters input { accent-color:var(--cyan); }
 
-/* SEARCH RESULTS: no fixed number of product cards */
 .results-grid {
     display:grid;
     grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
@@ -491,25 +452,25 @@ main {
     width:95px;
     height:92px;
     object-fit:contain;
-    mix-blend-mode:screen;
 }
 
-.result-info {
-    min-width:0;
+.result-card .image-empty {
+    width:95px;
+    min-width:95px;
+    height:92px;
+    font-size:10px;
+    text-align:center;
 }
+
+.result-info { min-width:0; }
 
 .result-info h3 {
     font-size:14px;
     margin:0 0 8px;
 }
 
-.result-info .price {
-    font-size:18px;
-}
-
-.result-info .rating {
-    font-size:13px;
-}
+.result-info .price { font-size:18px; }
+.result-info .rating { font-size:13px; }
 
 .result-card .cart {
     width:38px;
@@ -518,6 +479,8 @@ main {
     right:9px;
     bottom:10px;
 }
+
+/* PRODUCT DETAILS */
 
 .detail-top {
     display:grid;
@@ -533,16 +496,15 @@ main {
     padding:18px;
 }
 
-.gallery {
-    position:relative;
-}
+.gallery { position:relative; }
 
 .gallery>img {
     width:100%;
     height:360px;
     object-fit:contain;
-    mix-blend-mode:screen;
 }
+
+.gallery .image-empty { height:360px; }
 
 .badge {
     position:absolute;
@@ -553,6 +515,7 @@ main {
     padding:8px 15px;
     border-radius:20px;
     font-weight:800;
+    z-index:2;
 }
 
 .thumb-row {
@@ -571,10 +534,7 @@ main {
     cursor:pointer;
 }
 
-.description h1 {
-    font-size:32px;
-    margin:0 0 8px;
-}
+.description h1 { font-size:32px; margin:0 0 8px; }
 
 .description p {
     line-height:1.6;
@@ -588,16 +548,8 @@ main {
     margin:22px 0;
 }
 
-.feature {
-    font-size:13px;
-    color:#d7eee5;
-}
-
-.feature b {
-    display:block;
-    color:white;
-    margin-top:5px;
-}
+.feature { font-size:13px; color:#d7eee5; }
+.feature b { display:block; color:white; margin-top:5px; }
 
 .variant {
     border-top:1px solid #1b634e;
@@ -605,11 +557,7 @@ main {
     margin-top:14px;
 }
 
-.swatches {
-    display:flex;
-    gap:10px;
-    margin:12px 0;
-}
+.swatches { display:flex; gap:10px; margin:12px 0; }
 
 .swatch {
     width:25px;
@@ -638,11 +586,7 @@ main {
     font-weight:900;
 }
 
-.stock {
-    float:right;
-    color:#4dff9d;
-    font-size:13px;
-}
+.stock { float:right; color:#4dff9d; font-size:13px; }
 
 .buybox .buy {
     width:100%;
@@ -656,16 +600,6 @@ main {
     margin:18px 0 10px;
 }
 
-.buybox .secondary {
-    width:48%;
-    padding:13px;
-    border:1px solid var(--cyan);
-    background:transparent;
-    border-radius:12px;
-    margin-right:2%;
-    font-weight:700;
-}
-
 .buybox p {
     border-bottom:1px solid #245c4a;
     padding:12px 0;
@@ -673,11 +607,7 @@ main {
     font-size:14px;
 }
 
-.tabs {
-    display:flex;
-    gap:7px;
-    margin:32px 0 16px;
-}
+.tabs { display:flex; gap:7px; margin:32px 0 16px; }
 
 .tabs button {
     background:#00251c;
@@ -687,18 +617,10 @@ main {
     color:white;
 }
 
-.tabs button.active {
-    border:2px solid var(--cyan);
-}
+.tabs button.active { border:2px solid var(--cyan); }
 
-.specbox {
-    max-width:65%;
-    min-height:180px;
-}
-
-.specbox h2 {
-    margin-top:0;
-}
+.specbox { max-width:65%; min-height:180px; }
+.specbox h2 { margin-top:0; }
 
 .toast {
     position:fixed;
@@ -714,246 +636,9 @@ main {
     box-shadow:var(--shadow);
 }
 
-@media(max-width:1100px) {
-    .layout {
-        grid-template-columns:190px 1fr;
-    }
+/* ADDITIONAL PAGES */
 
-    .product-grid {
-        grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
-    }
-
-    .search-wrap {
-        gap:20px;
-    }
-
-    .detail-top {
-        grid-template-columns:1fr 1fr;
-    }
-
-    .buybox {
-        grid-column:1/-1;
-    }
-
-    .results-grid {
-        grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
-    }
-}
-
-@media(max-width:760px) {
-    .topbar {
-        height:52px;
-    }
-
-    .tagline {
-        font-size:12px;
-    }
-
-    .top-actions {
-        right:12px;
-    }
-
-    .top-actions span:first-child,
-    .top-actions .divider {
-        display:none;
-    }
-
-    .layout {
-        display:block;
-    }
-
-    .sidebar {
-        min-height:0;
-        padding:8px 10px;
-        border-right:0;
-        border-bottom:1px solid var(--line);
-    }
-
-    .logo img {
-        width:180px;
-    }
-
-    .nav {
-        flex-direction:row;
-        justify-content:space-around;
-        gap:3px;
-    }
-
-    .nav button {
-        height:47px;
-        padding:0 10px;
-        font-size:12px;
-        gap:5px;
-        border-radius:12px;
-    }
-
-    .nav button .ico {
-        font-size:19px;
-        width:auto;
-    }
-
-    main {
-        padding:12px;
-    }
-
-    .search-wrap {
-        gap:8px;
-    }
-
-    .searchbox {
-        height:49px;
-        padding:0 12px;
-        border-radius:15px;
-    }
-
-    .searchbox input {
-        font-size:14px;
-    }
-
-    .search-btn {
-        height:49px;
-        padding:0 14px;
-        font-size:14px;
-        border-radius:15px;
-    }
-
-    .search-icon {
-        font-size:22px;
-    }
-
-    .product-grid {
-        grid-template-columns:repeat(auto-fill,minmax(145px,1fr));
-        gap:9px;
-    }
-
-    .card {
-        padding:8px 10px;
-        border-radius:16px;
-    }
-
-    .card img {
-        height:90px;
-    }
-
-    .card-name {
-        font-size:13px;
-    }
-
-    .price {
-        font-size:18px;
-    }
-
-    .cart {
-        width:35px;
-        height:35px;
-        font-size:18px;
-        right:8px;
-        bottom:34px;
-    }
-
-    .seller {
-        font-size:14px;
-    }
-
-    .section-title h2 {
-        font-size:21px;
-    }
-
-    .results-layout {
-        grid-template-columns:1fr;
-    }
-
-    .filters {
-        display:grid;
-        grid-template-columns:repeat(2,1fr);
-        gap:8px;
-    }
-
-    .filter-group {
-        margin:0;
-    }
-
-    .results-grid {
-        grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
-    }
-
-    .result-card img {
-        width:75px;
-    }
-
-    .detail-top {
-        grid-template-columns:1fr;
-    }
-
-    .gallery>img {
-        height:260px;
-    }
-
-    .buybox {
-        grid-column:auto;
-    }
-
-    .specbox {
-        max-width:100%;
-    }
-
-    .tabs {
-        overflow:auto;
-    }
-
-    .tabs button {
-        white-space:nowrap;
-        padding:12px;
-    }
-
-    .search-panel {
-        top:54px;
-        padding:14px;
-    }
-
-    .mini {
-        width:105px;
-        min-width:105px;
-    }
-}
-
-/* Additional page styles */
-.light-theme {
-    --bg:#effaf5;
-    --panel:#ffffff;
-    --panel2:#e1f4eb;
-    --text:#10271e;
-    --muted:#526d61;
-    background:#effaf5;
-    color:#10271e;
-}
-
-.light-theme .sidebar,
-.light-theme .topbar,
-.light-theme .searchbox,
-.light-theme .card,
-.light-theme .result-card,
-.light-theme .filters,
-.light-theme .gallery,
-.light-theme .description,
-.light-theme .buybox,
-.light-theme .specbox {
-    background:#ffffff;
-    color:#10271e;
-}
-
-.light-theme .searchbox input {
-    color:#10271e;
-}
-
-.light-theme .description p,
-.light-theme .filters label {
-    color:#526d61;
-}
-
-.about-panel,
-.form-panel,
-.category-panel {
+.about-panel,.form-panel,.category-panel {
     max-width:850px;
     margin:30px auto;
     padding:30px;
@@ -962,10 +647,7 @@ main {
     background:var(--panel);
 }
 
-.about-panel p {
-    line-height:1.8;
-    color:var(--muted);
-}
+.about-panel p { line-height:1.8; color:var(--muted); }
 
 .contact-line {
     border-top:1px solid var(--line);
@@ -985,16 +667,9 @@ main {
     resize:vertical;
 }
 
-.form-panel label {
-    display:block;
-    margin-top:15px;
-}
+.form-panel label { display:block; margin-top:15px; }
 
-.stars {
-    display:flex;
-    gap:10px;
-    margin:12px 0 20px;
-}
+.stars { display:flex; gap:10px; margin:12px 0 20px; }
 
 .stars button {
     border:0;
@@ -1003,9 +678,7 @@ main {
     font-size:32px;
 }
 
-.stars button.on {
-    color:#ffc928;
-}
+.stars button.on { color:#ffc928; }
 
 .primary-action {
     background:var(--cyan);
@@ -1032,10 +705,7 @@ main {
     font-weight:700;
 }
 
-.empty-note {
-    color:var(--muted);
-    padding:20px;
-}
+.empty-note { color:var(--muted); padding:20px; }
 
 .brand-title {
     display:flex;
@@ -1088,32 +758,182 @@ main {
     margin-top:15px;
 }
 
-.offer-table th,
-.offer-table td {
+.offer-table th,.offer-table td {
     padding:12px;
     border-bottom:1px solid var(--line);
     text-align:left;
 }
 
-.offer-table .lowest {
-    color:var(--green);
-    font-weight:900;
+.offer-table .lowest { color:var(--green); font-weight:900; }
+
+/* LIGHT THEME */
+
+.light-theme {
+    --bg:#effaf5;
+    --panel:#ffffff;
+    --panel2:#e1f4eb;
+    --text:#10271e;
+    --muted:#526d61;
+    background:#effaf5;
+    color:#10271e;
+}
+
+.light-theme .sidebar,
+.light-theme .topbar,
+.light-theme .searchbox,
+.light-theme .card,
+.light-theme .result-card,
+.light-theme .filters,
+.light-theme .gallery,
+.light-theme .description,
+.light-theme .buybox,
+.light-theme .specbox,
+.light-theme .about-panel,
+.light-theme .form-panel {
+    background:#ffffff;
+    color:#10271e;
+}
+
+.light-theme .searchbox input { color:#10271e; }
+.light-theme .description p,.light-theme .filters label { color:#526d61; }
+
+.light-theme .top-actions select {
+    background:#fff;
+    color:#10271e;
+}
+
+.light-theme .card .seller { color:#10271e; }
+.light-theme .result-info h3 { color:#10271e; }
+.light-theme .nav button { color:#10271e; }
+.light-theme .nav button.active { color:white; }
+
+@media(max-width:1100px) {
+    .layout { grid-template-columns:190px 1fr; }
+
+    .product-grid {
+        grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+    }
+
+    .search-wrap { gap:20px; }
+    .detail-top { grid-template-columns:1fr 1fr; }
+    .buybox { grid-column:1/-1; }
+
+    .results-grid {
+        grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+    }
 }
 
 @media(max-width:760px) {
-    .about-panel,
-    .form-panel,
-    .category-panel {
+    .topbar { height:52px; }
+    .tagline { font-size:12px; }
+    .top-actions { right:12px; }
+    .top-actions .divider { display:none; }
+
+    .layout { display:block; }
+
+    .sidebar {
+        min-height:0;
+        padding:8px 10px;
+        border-right:0;
+        border-bottom:1px solid var(--line);
+    }
+
+    .logo img { width:180px; }
+
+    .nav {
+        flex-direction:row;
+        justify-content:space-around;
+        gap:3px;
+    }
+
+    .nav button {
+        height:47px;
+        padding:0 10px;
+        font-size:12px;
+        gap:5px;
+        border-radius:12px;
+    }
+
+    .nav button .ico { font-size:19px; width:auto; }
+    main { padding:12px; }
+
+    .search-wrap { gap:8px; }
+
+    .searchbox {
+        height:49px;
+        padding:0 12px;
+        border-radius:15px;
+    }
+
+    .searchbox input { font-size:14px; }
+
+    .search-btn {
+        height:49px;
+        padding:0 14px;
+        font-size:14px;
+        border-radius:15px;
+    }
+
+    .search-icon { font-size:22px; }
+
+    .product-grid {
+        grid-template-columns:repeat(auto-fill,minmax(145px,1fr));
+        gap:9px;
+    }
+
+    .card { padding:8px 10px; border-radius:16px; }
+    .card img,.card .image-empty { height:90px; }
+    .card-name { font-size:13px; }
+    .price { font-size:18px; }
+
+    .cart {
+        width:35px;
+        height:35px;
+        font-size:18px;
+        right:8px;
+        bottom:34px;
+    }
+
+    .seller { font-size:14px; }
+    .section-title h2 { font-size:21px; }
+
+    .results-layout { grid-template-columns:1fr; }
+
+    .filters {
+        display:grid;
+        grid-template-columns:repeat(2,1fr);
+        gap:8px;
+    }
+
+    .filter-group { margin:0; }
+
+    .results-grid {
+        grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+    }
+
+    .result-card img { width:75px; }
+    .detail-top { grid-template-columns:1fr; }
+    .gallery>img,.gallery .image-empty { height:260px; }
+    .buybox { grid-column:auto; }
+    .specbox { max-width:100%; }
+
+    .tabs { overflow:auto; }
+
+    .tabs button {
+        white-space:nowrap;
+        padding:12px;
+    }
+
+    .search-panel { top:54px; padding:14px; }
+
+    .about-panel,.form-panel,.category-panel {
         padding:18px;
         margin:15px auto;
     }
 
-    .offer-table {
-        font-size:12px;
-    }
+    .offer-table { font-size:12px; }
 
-    .offer-table th,
-    .offer-table td {
+    .offer-table th,.offer-table td {
         padding:8px 4px;
     }
 }
@@ -1194,24 +1014,18 @@ main {
 
                 <div class="panel-heading">
                     <span>Recent Searches</span>
-                    <button class="clear" id="clearRecent">
-                        Clear
-                    </button>
+                    <button class="clear" id="clearRecent">Clear</button>
                 </div>
 
                 <div class="chips" id="recentChips"></div>
 
-                <div class="panel-heading">
-                    Suggestions
-                </div>
+                <div class="panel-heading">Suggestions</div>
 
                 <div class="suggestion-list" id="suggestionList"></div>
 
             </div>
 
         </div>
-
-        <!-- HOME PAGE -->
 
         <section id="homePage">
 
@@ -1230,8 +1044,6 @@ main {
 
         </section>
 
-        <!-- SEARCH RESULTS PAGE -->
-
         <section id="resultsPage" style="display:none">
 
             <div class="results-head">
@@ -1247,20 +1059,13 @@ main {
 
             <div class="results-layout">
 
-                <aside class="filters" id="dynamicFilters">
-                    <div class="filter-group">
-                        <div class="filter-title">Filters</div>
-                        <p>Search for a product to see relevant filters.</p>
-                    </div>
-                </aside>
+                <aside class="filters" id="dynamicFilters"></aside>
 
                 <div class="results-grid" id="resultsGrid"></div>
 
             </div>
 
         </section>
-
-        <!-- PRODUCT DETAIL PAGE -->
 
         <section id="detailPage" style="display:none">
 
@@ -1269,26 +1074,26 @@ main {
                 <div class="gallery">
                     <span class="badge">Product details</span>
 
-                    <img id="detailImage"
-                        src="https://placehold.co/420x320/003024/20d890?text=GETEAS"
-                        alt="Product image">
+                    <div id="detailImageContainer">
+                        <div class="image-empty">Product image unavailable</div>
+                    </div>
 
                     <div class="thumb-row"></div>
                 </div>
 
                 <div class="description">
                     <h1 id="detailName">Product Name</h1>
-                    <p>Product information</p>
+                    <p id="detailDescription">Product information</p>
 
                     <div class="features">
                         <div class="feature">
                             Rating
-                            <b id="detailRating">★ 4.5</b>
+                            <b id="detailRating">★ —</b>
                         </div>
 
                         <div class="feature">
                             Reviews
-                            <b id="detailReviews">Reviews</b>
+                            <b id="detailReviews">—</b>
                         </div>
 
                         <div class="feature">
@@ -1299,24 +1104,17 @@ main {
 
                     <div class="variant">
                         <b>Available Variants</b>
-                        <div class="swatches">
-                            <span class="swatch"></span>
-                            <span class="swatch"></span>
-                            <span class="swatch"></span>
-                        </div>
+                        <div class="swatches" id="detailSwatches"></div>
                     </div>
-
                 </div>
 
                 <div class="buybox">
 
                     <span class="stock">Compare offers</span>
 
-                    <div class="big-price" id="detailPrice">
-                        ₹0
-                    </div>
+                    <div class="big-price" id="detailPrice">₹0</div>
 
-                    <button class="buy">
+                    <button class="buy" id="compareButton">
                         Compare Retailers
                     </button>
 
@@ -1327,59 +1125,52 @@ main {
             </div>
 
             <div class="tabs">
-                <button class="active">Specifications</button>
-                <button>Price History</button>
-                <button>Retailer Offers</button>
+                <button class="active" data-tab="specifications">Specifications</button>
+                <button data-tab="history">Price History</button>
+                <button data-tab="offers">Retailer Offers</button>
             </div>
 
-            <div class="specbox">
+            <div class="specbox" id="specificationsSection">
                 <h2>Product Specifications</h2>
                 <div id="detailSpecs"></div>
             </div>
 
-            <div class="specbox" style="margin-top:20px">
+            <div class="specbox" id="historySection" style="margin-top:20px">
                 <h2>Price History</h2>
                 <div id="priceHistoryGraph"></div>
             </div>
 
-            <div class="specbox" style="margin-top:20px">
+            <div class="specbox" id="offersSection" style="margin-top:20px">
                 <h2>Compare Retailer Prices</h2>
                 <div id="retailerOffers"></div>
             </div>
 
         </section>
 
-        <!-- ABOUT, FEEDBACK AND CATEGORIES -->
-
         <section id="simplePage" style="display:none">
-
             <h1 id="simpleTitle"></h1>
-
             <div id="simpleContent"></div>
-
         </section>
 
     </main>
-
 </div>
 
-<div class="toast" id="toast">
-    Added successfully
-</div>
-
+<div class="toast" id="toast">Added successfully</div>
 <script>
 
-// PRODUCT DATA
-// Replace demonstration products with live products from your backend.
+// ======================================
+// GETEAS CONFIGURATION
+// ======================================
 
-const thumbs = [
-    'https://placehold.co/420x320/003024/20d890?text=Smartphone',
-    'https://placehold.co/420x320/003024/20d890?text=Smartwatch',
-    'https://placehold.co/420x320/003024/20d890?text=Laptop',
-    'https://placehold.co/420x320/003024/20d890?text=Headphones',
-    'https://placehold.co/420x320/003024/20d890?text=Shoes',
-    'https://placehold.co/420x320/003024/20d890?text=Camera'
-];
+const EMAIL_PLACEHOLDER = 'YOUR_EMAIL_HERE';
+const GETEAS_API_BASE = 'YOUR_BACKEND_API_URL';
+
+// ======================================
+// DEMONSTRATION PRODUCT DATA
+// ======================================
+
+// Product structure remains compatible with your original arrays.
+// Live retailer products will replace these when the API connects.
 
 const products = [
 
@@ -1403,7 +1194,13 @@ const products = [
 
 ];
 
+// Attach additional properties to products using Object.assign
+// or directly from your retailer API.
+
 let currentResults = [...products];
+let baseResults = [...products];
+let currentQuery = '';
+let currentProduct = null;
 
 let recent = [];
 
@@ -1411,6 +1208,9 @@ try {
     recent = JSON.parse(
         localStorage.getItem('geteas_recent_searches') || '[]'
     );
+
+    if (!Array.isArray(recent)) recent = [];
+
 } catch(e) {
     recent = [];
 }
@@ -1420,7 +1220,111 @@ const input = document.getElementById('searchInput');
 const panel = document.getElementById('searchPanel');
 
 
+// ======================================
+// SAFE TEXT HELPERS
+// ======================================
+
+function escapeHTML(value) {
+
+    return String(value ?? '').replace(/[&<>"']/g,char => ({
+        '&':'&amp;',
+        '<':'&lt;',
+        '>':'&gt;',
+        '"':'&quot;',
+        "'":'&#39;'
+    })[char]);
+
+}
+
+function getName(p) {
+    return p[0] || p.name || p.title || 'Product';
+}
+
+function getPrice(p) {
+    return p[1] ?? p.price ?? 0;
+}
+
+function getRating(p) {
+    return p[2] ?? p.rating ?? '—';
+}
+
+function getReviews(p) {
+    return p[3] ?? p.reviewCount ?? '—';
+}
+
+function getRetailer(p) {
+    return p[4] ?? p.retailer ?? 'Multiple retailers';
+}
+
+function getBrand(p) {
+    return p[6] ?? p.brand ?? '';
+}
+
+function getImage(p) {
+    return p.imageUrl || p.image || '';
+}
+
+function getImages(p) {
+    return Array.isArray(p.images) ? p.images : [];
+}
+
+function price(value) {
+
+    if (typeof value === 'number') return value;
+
+    return Number(
+        String(value).replace(/[₹,\s]/g,'')
+    ) || 0;
+
+}
+
+function formatPrice(value) {
+
+    return '₹' + Number(value).toLocaleString('en-IN');
+
+}
+
+
+// ======================================
+// IMAGE DISPLAY
+// ======================================
+
+function imageHTML(product,className='') {
+
+    const image = getImage(product);
+    const name = escapeHTML(getName(product));
+
+    if (!image) {
+
+        return `
+            <div class="image-empty ${className}">
+                Image unavailable
+            </div>
+        `;
+
+    }
+
+    return `
+        <img
+            class="${className}"
+            src="${escapeHTML(image)}"
+            alt="${name}"
+            loading="lazy"
+            onerror="this.replaceWith(
+                Object.assign(document.createElement('div'),{
+                    className:'image-empty',
+                    textContent:'Image unavailable'
+                })
+            )"
+        >
+    `;
+
+}
+
+
+// ======================================
 // PAGE SWITCHING
+// ======================================
 
 function show(id) {
 
@@ -1439,32 +1343,52 @@ function show(id) {
 }
 
 
+// ======================================
+// ACTIVE NAVIGATION
+// ======================================
+
+function setActiveNav(page) {
+
+    document.querySelectorAll('.nav button').forEach(button => {
+
+        button.classList.toggle(
+            'active',
+            button.dataset.page === page
+        );
+
+    });
+
+}
+
+
+// ======================================
 // PRODUCT CARD
+// ======================================
 
 function card(p,i) {
 
     return `
         <article class="card" data-index="${i}">
 
-            <img
-                src="${p.imageUrl || thumbs[p[5]] || thumbs[0]}"
-                alt="${p[0]}"
-                loading="lazy"
-            >
+            ${imageHTML(p)}
 
-            <div class="card-name">${p[0]}</div>
+            <div class="card-name">
+                ${escapeHTML(getName(p))}
+            </div>
 
-            <div class="price">${p[1]}</div>
+            <div class="price">
+                ${escapeHTML(getPrice(p))}
+            </div>
 
             <div class="rating">
                 <span class="star">★</span>
-                ${p[2]}
-                (${p[3]})
+                ${escapeHTML(getRating(p))}
+                (${escapeHTML(getReviews(p))})
             </div>
 
             <div class="seller">
                 <small>Available at</small>
-                ${p[4]}
+                ${escapeHTML(getRetailer(p))}
             </div>
 
             <button class="cart" aria-label="View product">
@@ -1477,22 +1401,21 @@ function card(p,i) {
 }
 
 
-// HOME PAGE: RENDER ALL PRODUCTS
+// ======================================
+// HOME: DISPLAY ALL AVAILABLE PRODUCTS
+// ======================================
 
 function renderHome() {
 
     grid.innerHTML = products.length
+
         ? products.map((p,i) => card(p,i)).join('')
+
         : '<p class="empty-note">No products are available right now.</p>';
 
     grid.querySelectorAll('.card').forEach((element,index) => {
 
-        element.addEventListener('click',event => {
-
-            if (event.target.closest('.cart')) {
-                showDetail(products[index]);
-                return;
-            }
+        element.addEventListener('click',() => {
 
             showDetail(products[index]);
 
@@ -1503,52 +1426,337 @@ function renderHome() {
 }
 
 
-// PRICE CONVERTER
-
-function price(value) {
-
-    return Number(
-        String(value).replace(/[₹,]/g,'')
-    ) || 0;
-
-}
-
-
-// PRODUCT DETAILS
+// ======================================
+// PRODUCT DETAIL PAGE
+// ======================================
 
 function showDetail(p) {
 
+    currentProduct = p;
+
     show('detailPage');
 
-    document.getElementById('detailName').textContent = p[0];
+    document.getElementById('detailName').textContent =
+        getName(p);
 
-    document.getElementById('detailImage').src =
-        p.imageUrl || thumbs[p[5]] || thumbs[0];
+    document.getElementById('detailDescription').textContent =
+        p.description || 'Product information';
 
     document.getElementById('detailRating').textContent =
-        '★ ' + p[2];
+        '★ ' + getRating(p);
 
     document.getElementById('detailReviews').textContent =
-        p[3] || 'Not available';
+        getReviews(p);
 
     document.getElementById('detailSeller').textContent =
-        p[4];
+        getRetailer(p);
 
     document.getElementById('detailPrice').textContent =
-        p[1];
+        getPrice(p);
+
+    const container =
+        document.getElementById('detailImageContainer');
+
+    container.innerHTML = imageHTML(p);
+
+    const row = document.querySelector('.thumb-row');
+
+    const images = [
+        getImage(p),
+        ...getImages(p)
+    ].filter(Boolean);
+
+    row.innerHTML = [...new Set(images)].map(src => `
+
+        <img src="${escapeHTML(src)}"
+             alt="${escapeHTML(getName(p))}"
+             loading="lazy">
+
+    `).join('');
+
+    row.querySelectorAll('img').forEach(image => {
+
+        image.onclick = () => {
+
+            container.innerHTML = '';
+
+            const large = document.createElement('img');
+
+            large.src = image.src;
+            large.alt = getName(p);
+
+            large.style.width = '100%';
+            large.style.height = '360px';
+            large.style.objectFit = 'contain';
+
+            container.appendChild(large);
+
+        };
+
+    });
+
+    renderProductInsights(p);
 
     window.scrollTo(0,0);
 
 }
 
 
+// ======================================
+// PRODUCT INSIGHTS
+// ======================================
+
+function renderProductInsights(p) {
+
+    const brand = getBrand(p) || 'Brand';
+
+    const mark = brand
+        .split(/\s+/)
+        .map(x => x[0])
+        .join('')
+        .slice(0,3)
+        .toUpperCase();
+
+    const description =
+        document.querySelector('.detail-top .description');
+
+    let brandline =
+        description.querySelector('.brand-title');
+
+    if (!brandline) {
+
+        brandline = document.createElement('div');
+
+        brandline.className = 'brand-title';
+
+        description.insertBefore(
+            brandline,
+            description.querySelector('p')
+        );
+
+    }
+
+    brandline.innerHTML = '';
+
+    if (p.brandLogoUrl || p.brandLogo) {
+
+        const logo = document.createElement('img');
+
+        logo.src = p.brandLogoUrl || p.brandLogo;
+        logo.alt = brand + ' logo';
+        logo.style.cssText =
+            'width:42px;height:42px;object-fit:contain;background:#fff;border-radius:10px;padding:4px';
+
+        brandline.appendChild(logo);
+
+    } else {
+
+        const badge = document.createElement('span');
+
+        badge.className = 'brand-mark';
+        badge.textContent = mark;
+
+        brandline.appendChild(badge);
+
+    }
+
+    const brandName = document.createElement('b');
+
+    brandName.textContent = brand;
+
+    brandline.appendChild(brandName);
+
+
+    // SPECIFICATIONS
+
+    const specs = p.specifications || p.specs || {
+
+        Brand:brand,
+
+        Category:getCategory(getName(p)),
+
+        Storage:p[7] || 'See retailer',
+
+        Colour:p[8] || 'See retailer'
+
+    };
+
+    document.getElementById('detailSpecs').innerHTML =
+
+        Object.entries(specs).map(([key,value]) => `
+
+            <p>
+                <b>${escapeHTML(key)}:</b>
+                ${escapeHTML(value)}
+            </p>
+
+        `).join('');
+
+
+    // VARIANTS
+
+    const swatches =
+        document.getElementById('detailSwatches');
+
+    const variants = p.variants || [];
+
+    swatches.innerHTML = variants.length
+
+        ? variants.map(v => `
+
+            <span class="swatch"
+                title="${escapeHTML(v.name || v.colour || v.color || '')}"
+                style="background:${escapeHTML(v.colorCode || '#20d890')}">
+            </span>
+
+        `).join('')
+
+        : '<span class="empty-note">Variant information unavailable.</span>';
+
+
+    // PRICE HISTORY
+
+    const history = p.priceHistory || [];
+
+    const graph =
+        document.getElementById('priceHistoryGraph');
+
+    if (history.length) {
+
+        const highest = Math.max(
+            ...history.map(item => Number(item.price) || 0),
+            1
+        );
+
+        graph.innerHTML = `
+
+            <div class="history-bars">
+
+                ${history.map(item => `
+
+                    <div class="history-bar"
+                        style="height:${Math.max(
+                            12,
+                            Number(item.price) / highest * 100
+                        )}%"
+                        title="${formatPrice(item.price)}">
+
+                        <span>${escapeHTML(item.date || '')}</span>
+
+                    </div>
+
+                `).join('')}
+
+            </div>
+
+        `;
+
+    } else {
+
+        graph.innerHTML = `
+
+            <p class="empty-note">
+                Price history will appear after GETEAS starts
+                saving verified, dated prices from connected retailers.
+            </p>
+
+        `;
+
+    }
+
+
+    // RETAILER OFFERS
+
+    const retailers = p.retailers || [];
+
+    const offers =
+        document.getElementById('retailerOffers');
+
+    if (retailers.length) {
+
+        const sorted = [...retailers].sort(
+            (a,b) => Number(a.price) - Number(b.price)
+        );
+
+        offers.innerHTML = `
+
+            <table class="offer-table">
+
+                <thead>
+                    <tr>
+                        <th>Retailer</th>
+                        <th>Price</th>
+                        <th>Availability</th>
+                        <th>Visit</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    ${sorted.map((retailer,index) => `
+
+                        <tr>
+
+                            <td>${escapeHTML(retailer.name)}</td>
+
+                            <td class="${index===0?'lowest':''}">
+                                ${formatPrice(retailer.price)}
+                            </td>
+
+                            <td>
+                                ${escapeHTML(retailer.availability || 'Check retailer')}
+                            </td>
+
+                            <td>
+                                ${retailer.url ? `
+
+                                    <a href="${escapeHTML(retailer.url)}"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style="color:var(--cyan)">
+                                        View product ↗
+                                    </a>
+
+                                ` : 'Unavailable'}
+                            </td>
+
+                        </tr>
+
+                    `).join('')}
+
+                </tbody>
+
+            </table>
+
+        `;
+
+    } else {
+
+        offers.innerHTML = `
+
+            <p class="empty-note">
+                Retailer prices and purchase links will appear
+                when authorised retailer feeds are connected.
+            </p>
+
+        `;
+
+    }
+
+}
+
+
+// ======================================
 // SEARCH
+// ======================================
 
 function runSearch(q) {
 
     q = q.trim();
 
     if (!q) return;
+
+    currentQuery = q;
 
     recent = [
         q,
@@ -1558,26 +1766,48 @@ function runSearch(q) {
     ].slice(0,8);
 
     try {
+
         localStorage.setItem(
             'geteas_recent_searches',
             JSON.stringify(recent)
         );
+
     } catch(e) {}
+
 
     const query = q.toLowerCase();
 
-    currentResults = products.filter(p =>
-        (p[0] + ' ' + p[6]).toLowerCase().includes(query)
-    );
+    baseResults = products.filter(p => {
 
-    if (!currentResults.length) {
+        const searchable = [
+
+            getName(p),
+            getBrand(p),
+            getRetailer(p),
+            p.category || '',
+            p.description || ''
+
+        ].join(' ').toLowerCase();
+
+        return searchable.includes(query);
+
+    });
+
+
+    if (!baseResults.length) {
 
         const words = query.split(/\s+/).filter(Boolean);
 
-        currentResults = products.filter(p => {
+        baseResults = products.filter(p => {
 
-            const searchable =
-                (p[0] + ' ' + p[6]).toLowerCase();
+            const searchable = [
+
+                getName(p),
+                getBrand(p),
+                getRetailer(p),
+                p.category || ''
+
+            ].join(' ').toLowerCase();
 
             return words.some(word =>
                 searchable.includes(word)
@@ -1586,6 +1816,8 @@ function runSearch(q) {
         });
 
     }
+
+    currentResults = [...baseResults];
 
     document.getElementById('resultsTitle').textContent =
         `Showing ${currentResults.length} results for “${q}”`;
@@ -1605,7 +1837,9 @@ function runSearch(q) {
 }
 
 
-// SEARCH RESULTS: RENDER EVERY MATCHING PRODUCT
+// ======================================
+// SEARCH RESULTS: DISPLAY ALL MATCHES
+// ======================================
 
 function renderResults() {
 
@@ -1621,26 +1855,24 @@ function renderResults() {
             <article class="result-card"
                 data-result-index="${i}">
 
-                <img
-                    src="${p.imageUrl || thumbs[p[5]] || thumbs[0]}"
-                    alt="${p[0]}"
-                    loading="lazy"
-                >
+                ${imageHTML(p)}
 
                 <div class="result-info">
 
-                    <h3>${p[0]}</h3>
+                    <h3>${escapeHTML(getName(p))}</h3>
 
-                    <div class="price">${p[1]}</div>
+                    <div class="price">
+                        ${escapeHTML(getPrice(p))}
+                    </div>
 
                     <div class="rating">
-                        ★ ${p[2]} (${p[3]})
+                        ★ ${escapeHTML(getRating(p))}
+                        (${escapeHTML(getReviews(p))})
                     </div>
 
                 </div>
 
-                <button class="cart"
-                    aria-label="View product">
+                <button class="cart" aria-label="View product">
                     ↗
                 </button>
 
@@ -1663,7 +1895,9 @@ function renderResults() {
 }
 
 
+// ======================================
 // RECENT SEARCHES AND SUGGESTIONS
+// ======================================
 
 function updatePanel() {
 
@@ -1673,13 +1907,18 @@ function updatePanel() {
     const suggestionList =
         document.getElementById('suggestionList');
 
-    recentChips.innerHTML = recent.map(item => `
+    recentChips.innerHTML = recent.length
 
-        <button class="chip" data-search="${item}">
-            ${item}
-        </button>
+        ? recent.map(item => `
 
-    `).join('');
+            <button class="chip"
+                data-search="${escapeHTML(item)}">
+                ${escapeHTML(item)}
+            </button>
+
+        `).join('')
+
+        : '<span class="empty-note">No recent searches yet.</span>';
 
     recentChips.querySelectorAll('button').forEach(button => {
 
@@ -1693,29 +1932,39 @@ function updatePanel() {
 
     });
 
-    const query = input.value.toLowerCase();
+    const query = input.value.toLowerCase().trim();
 
     const suggestions = query
 
-        ? products
-            .filter(p => p[0].toLowerCase().includes(query))
-            .slice(0,6)
+        ? products.filter(p => {
+
+            const searchable = (
+                getName(p) + ' ' + getBrand(p)
+            ).toLowerCase();
+
+            return searchable.includes(query);
+
+        }).slice(0,8)
 
         : products.slice(0,5);
 
-    suggestionList.innerHTML = suggestions.map(p => `
+    suggestionList.innerHTML = suggestions.length
 
-        <button class="suggestion">
-            ${p[0]}
-        </button>
+        ? suggestions.map(p => `
 
-    `).join('');
+            <button class="suggestion">
+                ${escapeHTML(getName(p))}
+            </button>
+
+        `).join('')
+
+        : '<span class="empty-note">No suggestions found.</span>';
 
     suggestionList.querySelectorAll('button').forEach((button,index) => {
 
         button.onclick = () => {
 
-            input.value = suggestions[index][0];
+            input.value = getName(suggestions[index]);
 
             runSearch(input.value);
 
@@ -1726,7 +1975,9 @@ function updatePanel() {
 }
 
 
+// ======================================
 // SEARCH EVENTS
+// ======================================
 
 document.getElementById('searchBtn').onclick = () => {
     runSearch(input.value);
@@ -1768,6 +2019,8 @@ document.getElementById('clearSearch').onclick = () => {
 
     updatePanel();
 
+    input.focus();
+
 };
 
 document.getElementById('clearRecent').onclick = () => {
@@ -1782,65 +2035,13 @@ document.getElementById('clearRecent').onclick = () => {
 
 };
 
+document.addEventListener('click',event => {
 
-// TOAST MESSAGE
-
-function toast() {
-
-    const message = document.getElementById('toast');
-
-    message.style.display = 'block';
-
-    setTimeout(() => {
-        message.style.display = 'none';
-    },1800);
-
-}
-
-
-// SORT PRODUCTS
-
-document.getElementById('sortSelect').onchange = event => {
-
-    let list = [...currentResults];
-
-    if (event.target.value.includes('Low')) {
-
-        list.sort((a,b) => price(a[1])-price(b[1]));
-
+    if (!event.target.closest('.search-wrap')) {
+        panel.classList.remove('show');
     }
 
-    if (event.target.value.includes('High')) {
-
-        list.sort((a,b) => price(b[1])-price(a[1]));
-
-    }
-
-    if (event.target.value === 'Rating') {
-
-        list.sort((a,b) => Number(b[2])-Number(a[2]));
-
-    }
-
-    currentResults = list;
-
-    renderResults();
-
-};
-
-
-// INITIAL HOME DISPLAY
-
-renderHome();
-
-
-// ======================================
-// GETEAS CONFIGURATION
-// ======================================
-
-const EMAIL_PLACEHOLDER = 'YOUR_EMAIL_HERE';
-
-const GETEAS_API_BASE = 'YOUR_BACKEND_API_URL';
+});
 
 
 // ======================================
@@ -1950,7 +2151,6 @@ function renderDynamicFilters(q) {
             <label>
                 Minimum price (₹)
                 <input id="minPrice"
-                    class="filter-select"
                     type="number"
                     placeholder="0">
             </label>
@@ -1958,7 +2158,6 @@ function renderDynamicFilters(q) {
             <label>
                 Maximum price (₹)
                 <input id="maxPrice"
-                    class="filter-select"
                     type="number"
                     placeholder="No limit">
             </label>
@@ -1990,16 +2189,16 @@ function renderDynamicFilters(q) {
 
             <div class="filter-group">
 
-                <div class="filter-title">${title}</div>
+                <div class="filter-title">${escapeHTML(title)}</div>
 
                 ${values.map(value => `
 
                     <label>
                         <input type="checkbox"
                             class="spec-filter"
-                            data-group="${title}"
-                            value="${value}">
-                        ${value}
+                            data-group="${escapeHTML(title)}"
+                            value="${escapeHTML(value)}">
+                        ${escapeHTML(value)}
                     </label>
 
                 `).join('')}
@@ -2029,8 +2228,7 @@ function renderDynamicFilters(q) {
 
         </div>
 
-        <button class="primary-action"
-            id="applyFilters">
+        <button class="primary-action" id="applyFilters">
             Apply Filters
         </button>
 
@@ -2049,9 +2247,12 @@ function renderDynamicFilters(q) {
 
     document.getElementById('resetFilters').onclick = () => {
 
-        currentResults = [...products];
+        currentResults = [...baseResults];
 
         renderResults();
+
+        document.getElementById('resultsTitle').textContent =
+            `${currentResults.length} products`;
 
     };
 
@@ -2059,7 +2260,7 @@ function renderDynamicFilters(q) {
 
 
 // ======================================
-// APPLY FILTERS
+// APPLY FILTERS TO CURRENT SEARCH
 // ======================================
 
 function applyDynamicFilters() {
@@ -2084,17 +2285,21 @@ function applyDynamicFilters() {
         ...document.querySelectorAll('.retailer-filter:checked')
     ].map(x => x.value.toLowerCase());
 
-    currentResults = products.filter(p => {
+    currentResults = baseResults.filter(p => {
 
-        const productPrice = price(p[1]);
-
-        const retailer = p[4].toLowerCase();
+        const productPrice = price(getPrice(p));
 
         const searchable = (
-            p.join(' ') +
-            ' ' +
-            JSON.stringify(p.specifications || {})
+
+            JSON.stringify(p) + ' ' +
+            JSON.stringify(p.specifications || {}) + ' ' +
+            JSON.stringify(p.specs || {})
+
         ).toLowerCase();
+
+        const retailer = getRetailer(p).toLowerCase();
+
+        const rating = Number(getRating(p)) || 0;
 
         return (
 
@@ -2102,7 +2307,7 @@ function applyDynamicFilters() {
             productPrice <= max &&
 
             (!ratings.length ||
-                ratings.some(r => Number(p[2]) >= r)) &&
+                ratings.some(r => rating >= r)) &&
 
             (!retailers.length ||
                 retailers.some(r => retailer.includes(r))) &&
@@ -2123,23 +2328,97 @@ function applyDynamicFilters() {
 
 
 // ======================================
-// ACTIVE NAVIGATION
+// SORT PRODUCTS
 // ======================================
 
-function setActiveNav(page) {
+document.getElementById('sortSelect').onchange = event => {
 
-    document.querySelectorAll('.nav button').forEach(button => {
+    let list = [...currentResults];
 
-        button.classList.toggle(
-            'active',
-            button.dataset.page === page
+    if (event.target.value.includes('Low')) {
+
+        list.sort((a,b) =>
+            price(getPrice(a))-price(getPrice(b))
         );
 
-    });
+    }
+
+    if (event.target.value.includes('High')) {
+
+        list.sort((a,b) =>
+            price(getPrice(b))-price(getPrice(a))
+        );
+
+    }
+
+    if (event.target.value === 'Rating') {
+
+        list.sort((a,b) =>
+            Number(getRating(b))-Number(getRating(a))
+        );
+
+    }
+
+    currentResults = list;
+
+    renderResults();
+
+};
+
+
+// ======================================
+// VIEW ALL PRODUCTS
+// ======================================
+
+document.getElementById('viewAll').onclick = () => {
+
+    currentQuery = '';
+
+    baseResults = [...products];
+
+    currentResults = [...products];
+
+    document.getElementById('resultsTitle').textContent =
+        `Showing all ${products.length} products`;
+
+    renderDynamicFilters('');
+
+    renderResults();
+
+    show('resultsPage');
+
+    setActiveNav('home');
+
+    window.scrollTo(0,0);
+
+};
+
+
+// ======================================
+// INITIAL HOME DISPLAY
+// ======================================
+
+renderHome();
+
+
+// ======================================
+// TOAST MESSAGE
+// ======================================
+
+function toast(message='Done successfully') {
+
+    const element = document.getElementById('toast');
+
+    element.textContent = message;
+
+    element.style.display = 'block';
+
+    setTimeout(() => {
+        element.style.display = 'none';
+    },1800);
 
 }
-
-
+    
 // ======================================
 // ABOUT US, FEEDBACK AND CATEGORIES
 // ======================================
@@ -2225,8 +2504,7 @@ function openStaticPage(page) {
 
                     <textarea id="feedbackText"
                         required
-                        placeholder="Write your suggestions or complaints...">
-                    </textarea>
+                        placeholder="Write your suggestions or complaints..."></textarea>
 
                     <label>Your rating</label>
 
@@ -2307,9 +2585,22 @@ function openStaticPage(page) {
 
             button.onclick = () => {
 
-                input.value = button.textContent.trim();
+                const category = button.dataset.category;
 
-                runSearch(button.textContent.trim());
+                const categoryNames = {
+                    phone:'smartphone',
+                    laptop:'laptop',
+                    watch:'watch',
+                    shoe:'shoe',
+                    clothing:'clothing',
+                    audio:'headphones',
+                    tv:'television',
+                    gaming:'gaming'
+                };
+
+                input.value = categoryNames[category] || category;
+
+                runSearch(input.value);
 
             };
 
@@ -2416,6 +2707,12 @@ function wireFeedback() {
 
             event.target.reset();
 
+            rating = 0;
+
+            document.querySelectorAll('#ratingStars button').forEach(star => {
+                star.classList.remove('on');
+            });
+
         } catch(error) {
 
             status.textContent =
@@ -2426,259 +2723,6 @@ function wireFeedback() {
     };
 
 }
-
-
-// ======================================
-// PRODUCT INSIGHTS
-// ======================================
-
-function renderProductInsights(p) {
-
-    const brand = p[6] || 'Brand';
-
-    const mark = brand
-        .split(/\s+/)
-        .map(x => x[0])
-        .join('')
-        .slice(0,3)
-        .toUpperCase();
-
-    const description =
-        document.querySelector('.detail-top .description');
-
-    let brandline =
-        description.querySelector('.brand-title');
-
-    if (!brandline) {
-
-        brandline = document.createElement('div');
-
-        brandline.className = 'brand-title';
-
-        description.insertBefore(
-            brandline,
-            description.querySelector('p')
-        );
-
-    }
-
-    brandline.innerHTML = p.brandLogoUrl
-
-        ? `
-            <img src="${p.brandLogoUrl}"
-                alt="${brand} logo"
-                style="width:42px;height:42px;object-fit:contain;background:#fff;border-radius:10px;padding:4px">
-            <b>${brand}</b>
-          `
-
-        : `
-            <span class="brand-mark">${mark}</span>
-            <b>${brand}</b>
-          `;
-
-
-    // SPECIFICATIONS
-
-    const specs = p.specifications || {
-
-        Brand:brand,
-
-        Category:getCategory(p[0]),
-
-        Storage:p[7] || 'See retailer',
-
-        Colour:p[8] || 'See retailer'
-
-    };
-
-    document.getElementById('detailSpecs').innerHTML =
-
-        Object.entries(specs).map(([key,value]) => `
-
-            <p>
-                <b>${key}:</b> ${value}
-            </p>
-
-        `).join('');
-
-
-    // PRICE HISTORY
-
-    const history = p.priceHistory || [];
-
-    document.getElementById('priceHistoryGraph').innerHTML =
-
-        history.length
-
-        ? `
-
-            <div class="history-bars">
-
-                ${history.map(item => `
-
-                    <div class="history-bar"
-                        style="height:${Math.max(
-                            12,
-                            item.price /
-                            Math.max(...history.map(x => x.price)) * 100
-                        )}%"
-                        title="₹${Number(item.price).toLocaleString('en-IN')}">
-
-                        <span>${item.date}</span>
-
-                    </div>
-
-                `).join('')}
-
-            </div>
-
-          `
-
-        : `
-
-            <p class="empty-note">
-                Price history will appear after GETEAS starts
-                saving verified, dated prices from connected retailers.
-            </p>
-
-          `;
-
-
-    // RETAILER OFFERS
-
-    const retailers = p.retailers || [];
-
-    document.getElementById('retailerOffers').innerHTML =
-
-        retailers.length
-
-        ? `
-
-            <table class="offer-table">
-
-                <thead>
-                    <tr>
-                        <th>Retailer</th>
-                        <th>Price</th>
-                        <th>Availability</th>
-                        <th>Visit</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                    ${[...retailers]
-                        .sort((a,b) => Number(a.price)-Number(b.price))
-                        .map((retailer,index) => `
-
-                            <tr>
-
-                                <td>${retailer.name}</td>
-
-                                <td class="${index===0?'lowest':''}">
-                                    ₹${Number(retailer.price).toLocaleString('en-IN')}
-                                </td>
-
-                                <td>
-                                    ${retailer.availability || 'Check retailer'}
-                                </td>
-
-                                <td>
-                                    <a href="${retailer.url}"
-                                        target="_blank"
-                                        rel="noopener"
-                                        style="color:var(--cyan)">
-                                        View product ↗
-                                    </a>
-                                </td>
-
-                            </tr>
-
-                        `).join('')}
-
-                </tbody>
-
-            </table>
-
-          `
-
-        : `
-
-            <p class="empty-note">
-                Retailer prices and purchase links will appear
-                when authorised retailer feeds are connected.
-            </p>
-
-          `;
-
-}
-
-
-// ======================================
-// EXTEND PRODUCT DETAIL PAGE
-// ======================================
-
-const originalShowDetail = showDetail;
-
-showDetail = function(p) {
-
-    originalShowDetail(p);
-
-    renderProductInsights(p);
-
-    const hero = document.getElementById('detailImage');
-
-    hero.src = p.imageUrl || thumbs[p[5]] || thumbs[0];
-
-    hero.alt = p[0];
-
-    const row = document.querySelector('.thumb-row');
-
-    if (p.images && p.images.length) {
-
-        row.innerHTML = p.images.map(src => `
-
-            <img src="${src}" alt="${p[0]} image">
-
-        `).join('');
-
-        row.querySelectorAll('img').forEach(image => {
-
-            image.onclick = () => {
-                hero.src = image.src;
-            };
-
-        });
-
-    } else {
-
-        row.innerHTML = '';
-
-    }
-
-};
-
-
-// ======================================
-// VIEW ALL PRODUCTS
-// ======================================
-
-document.getElementById('viewAll').onclick = () => {
-
-    currentResults = [...products];
-
-    document.getElementById('resultsTitle').textContent =
-        'Showing all products';
-
-    renderDynamicFilters('');
-
-    renderResults();
-
-    show('resultsPage');
-
-    setActiveNav('home');
-
-};
 
 
 // ======================================
@@ -2744,9 +2788,6 @@ try {
 
 setTheme(savedTheme);
 
-
-// Switch theme on click.
-
 themeBtn.onclick = () => {
 
     const light =
@@ -2758,7 +2799,7 @@ themeBtn.onclick = () => {
 
 
 // ======================================
-// ENGLISH AND MALAYALAM SELECTOR
+// ENGLISH AND MALAYALAM
 // ======================================
 
 const translations = {
@@ -2841,8 +2882,65 @@ setLanguage(savedLanguage);
 
 
 // ======================================
+// PRODUCT TAB NAVIGATION
+// ======================================
+
+document.querySelectorAll('.tabs button').forEach(button => {
+
+    button.onclick = () => {
+
+        document.querySelectorAll('.tabs button').forEach(tab => {
+            tab.classList.remove('active');
+        });
+
+        button.classList.add('active');
+
+        const tab = button.dataset.tab;
+
+        const target = {
+
+            specifications:'specificationsSection',
+
+            history:'historySection',
+
+            offers:'offersSection'
+
+        }[tab];
+
+        if (target) {
+
+            document.getElementById(target).scrollIntoView({
+                behavior:'smooth',
+                block:'start'
+            });
+
+        }
+
+    };
+
+});
+
+
+// ======================================
+// COMPARE RETAILERS BUTTON
+// ======================================
+
+document.getElementById('compareButton').onclick = () => {
+
+    document.getElementById('offersSection').scrollIntoView({
+        behavior:'smooth',
+        block:'start'
+    });
+
+};
+
+
+// ======================================
 // AUTOMATIC RETAILER PRODUCT SYNC
 // ======================================
+
+// This requires an authorised retailer API/feed and a backend.
+// The frontend cannot independently access private retailer databases.
 
 async function syncRetailerProducts() {
 
@@ -2875,15 +2973,15 @@ async function syncRetailerProducts() {
             ? payload
             : (payload.products || []);
 
-        window.geteasLiveProducts = feed;
-
-        const mapped = feed.map((item,index) => {
+        const mapped = feed.map(item => {
 
             const product = [
 
                 item.name || item.title || 'Product',
 
-                `₹${Number(item.price || 0).toLocaleString('en-IN')}`,
+                typeof item.price === 'number'
+                    ? formatPrice(item.price)
+                    : (item.price || 'Price unavailable'),
 
                 String(item.rating || '—'),
 
@@ -2891,7 +2989,7 @@ async function syncRetailerProducts() {
 
                 item.retailer || 'Multiple retailers',
 
-                index,
+                0,
 
                 item.brand || '',
 
@@ -2903,15 +3001,23 @@ async function syncRetailerProducts() {
 
             Object.assign(product,{
 
-                imageUrl:item.imageUrl || item.image,
+                id:item.id,
+
+                category:item.category || '',
+
+                description:item.description || '',
+
+                imageUrl:item.imageUrl || item.image || '',
 
                 images:item.images || [],
 
                 brandLogoUrl:
-                    item.brandLogoUrl || item.brandLogo,
+                    item.brandLogoUrl || item.brandLogo || '',
 
                 specifications:
                     item.specifications || item.specs || {},
+
+                variants:item.variants || [],
 
                 retailers:item.retailers || [],
 
@@ -2924,24 +3030,29 @@ async function syncRetailerProducts() {
         });
 
 
-        if (mapped.length) {
+        // Replace the current product list with ALL API products.
+        // No fixed product limit or slice is applied.
 
-            products.splice(
-                0,
-                products.length,
-                ...mapped
-            );
+        products.splice(
+            0,
+            products.length,
+            ...mapped
+        );
 
-            currentResults = [...products];
+        baseResults = [...products];
 
-            renderHome();
+        currentResults = [...products];
 
-        }
+        renderHome();
+
+        console.info(
+            `GETEAS synced ${products.length} products.`
+        );
 
     } catch(error) {
 
         console.warn(
-            'GETEAS retailer sync is not connected:',
+            'GETEAS retailer sync failed:',
             error.message
         );
 
@@ -2950,12 +3061,16 @@ async function syncRetailerProducts() {
 }
 
 
-// Start product synchronisation.
+// ======================================
+// START AUTOMATIC SYNCHRONISATION
+// ======================================
 
 syncRetailerProducts();
 
 
+// ======================================
 // FINAL INITIALISATION
+// ======================================
 
 renderHome();
 
@@ -2964,4 +3079,4 @@ console.log('GETEAS successfully initialised.');
 </script>
 
 </body>
-    </html>
+</html>
