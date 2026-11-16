@@ -14,6 +14,8 @@ button,input,select,textarea{font:inherit}
 button{cursor:pointer;color:inherit}
 
 .topbar{height:60px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:center;position:relative;padding:0 24px;background:#00140e}
+.top-logo{position:absolute;left:20px;top:50%;transform:translateY(-50%);display:block;width:210px;z-index:5}
+.top-logo img{display:block;width:100%;height:auto;object-fit:contain}
 .tagline{font-size:16px;font-style:italic}
 .tagline b{color:var(--cyan)}
 .top-actions{position:absolute;right:28px;display:flex;align-items:center;gap:18px}
@@ -23,8 +25,6 @@ button{cursor:pointer;color:inherit}
 
 .layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 60px)}
 .sidebar{border-right:1px solid var(--line);padding:10px;min-height:calc(100vh - 60px)}
-.logo{display:block;margin:0 0 18px;text-align:left}
-.logo img{display:block;width:100%;max-width:200px;height:auto;object-fit:contain}
 .nav{display:flex;flex-direction:column;gap:9px}
 .nav button{height:58px;border:0;background:transparent;text-align:left;padding:0 15px;border-radius:17px;font-size:16px;display:flex;align-items:center;gap:16px}
 .nav .ico{font-size:25px;width:24px;text-align:center}
@@ -108,17 +108,26 @@ main{padding:16px 26px 42px;min-width:0}
 .offer-table th,.offer-table td{padding:10px;border-bottom:1px solid var(--line);text-align:left}
 .lowest{color:var(--green);font-weight:900}
 
-.about-panel,.form-panel,.category-panel{max-width:900px;margin:25px auto;padding:25px}
-.about-panel p{line-height:1.8;color:var(--muted)}
+.about-panel{max-width:1020px;margin:25px auto;padding:36px}
+.about-heading{display:flex;align-items:center;gap:14px;font-size:36px;margin:0 0 68px}
+.about-heading img{width:260px;max-width:65%;height:auto;object-fit:contain;display:block}
+.about-panel h2{font-size:28px;margin:0 0 24px}
+.about-panel p{line-height:1.8;color:var(--muted);font-size:18px}
+.about-contact{border-top:1px solid #26735c;margin-top:30px;padding-top:18px}
+.about-contact h3{margin:0 0 20px;font-size:18px}
+.about-contact a{color:var(--cyan)}
 .category-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:13px;margin-top:20px}
 .category-tile{border:1px solid var(--line);border-radius:15px;background:#003024;padding:20px;text-align:center;font-weight:700}
 .empty-note{color:var(--muted);padding:18px;line-height:1.5}
 .toast{position:fixed;bottom:22px;right:22px;background:#00dcb6;color:#00251b;padding:13px 18px;border-radius:11px;font-weight:800;display:none;z-index:40}
+.form-panel{max-width:900px;margin:25px auto;padding:25px}
 .form-panel textarea{width:100%;min-height:130px;margin:10px 0 18px;padding:13px;border-radius:11px;border:1px solid var(--line);background:#001b13;color:white}
 .form-panel label{display:block;margin:12px 0}
 .stars{display:flex;gap:8px;margin:10px 0 18px}
 .stars button{border:0;background:transparent;color:#687d74;font-size:30px}
 .stars button.on{color:#ffc928}
+
+#catalogueStatus{display:none!important}
 
 .light-theme{background:#effaf5;color:#10271e}
 .light-theme .sidebar,.light-theme .topbar,.light-theme .searchbox,.light-theme .card,.light-theme .result-card,.light-theme .filters,.light-theme .gallery,.light-theme .description,.light-theme .buybox,.light-theme .specbox,.light-theme .about-panel,.light-theme .form-panel,.light-theme .category-panel{background:#fff;color:#10271e}
@@ -129,21 +138,22 @@ main{padding:16px 26px 42px;min-width:0}
 .light-theme .nav button.active{color:white}
 .light-theme .seller,.light-theme .feature b{color:#10271e}
 .light-theme .result-info h3{color:#10271e}
+.light-theme .about-panel p{color:#526d61}
 
 @media(max-width:1050px){
 .layout{grid-template-columns:200px 1fr}
 .detail-top{grid-template-columns:1fr 1fr}
 .buybox{grid-column:1/-1}
 }
+
 @media(max-width:760px){
-.topbar{height:auto;min-height:52px;padding:10px 130px 10px 10px}
+.topbar{height:auto;min-height:65px;padding:10px 130px 10px 140px}
+.top-logo{left:8px;width:125px}
 .tagline{font-size:12px}
 .top-actions{right:8px;gap:8px}
 .top-actions .divider{display:none}
 .layout{display:block}
 .sidebar{min-height:0;padding:8px 10px;border-right:0;border-bottom:1px solid var(--line)}
-.logo{margin:0 0 8px}
-.logo img{width:170px;max-width:55vw}
 .nav{flex-direction:row;justify-content:space-around;gap:3px}
 .nav button{height:43px;padding:0 8px;font-size:11px;gap:4px;border-radius:10px}
 .nav .ico{font-size:17px;width:auto}
@@ -172,6 +182,11 @@ main{padding:12px}
 .results-grid{grid-template-columns:1fr 1fr}
 .result-card{gap:6px}
 .result-card img,.result-card .image-empty{width:65px;min-width:65px;height:70px}
+.about-panel{padding:22px}
+.about-heading{font-size:25px;gap:9px;margin-bottom:48px}
+.about-heading img{width:165px}
+.about-panel h2{font-size:21px}
+.about-panel p{font-size:15px}
 }
 </style>
 </head>
@@ -179,6 +194,9 @@ main{padding:12px}
 <body>
 
 <header class="topbar">
+<a href="#home" class="top-logo">
+<img src="geteas-logo.png" alt="GETEAS Logo">
+</a>
 <div class="tagline">Discover More. Compare Better. <b>GETEAS.</b></div>
 <div class="top-actions">
 <button id="themeToggle" aria-label="Change theme">☀</button>
@@ -192,10 +210,6 @@ main{padding:12px}
 
 <div class="layout">
 <aside class="sidebar">
-<a href="#home" class="logo">
-<img src="geteas-logo.png" alt="GETEAS Logo">
-</a>
-
 <nav class="nav">
 <button class="active" data-page="home"><span class="ico">⌂</span>Home</button>
 <button data-page="categories"><span class="ico">▦</span>Categories</button>
@@ -214,7 +228,6 @@ main{padding:12px}
 <button id="clearSearch" class="clear" style="display:none">✕</button>
 </div>
 <button class="search-btn" id="searchBtn">Search</button>
-
 <div class="search-panel" id="searchPanel">
 <div class="panel-heading"><span>Recent Searches</span><button class="clear" id="clearRecent">Clear</button></div>
 <div class="chips" id="recentChips"></div>
@@ -256,7 +269,6 @@ main{padding:12px}
 <div id="detailImageContainer"><div class="image-empty">Product image unavailable</div></div>
 <div class="thumb-row"></div>
 </div>
-
 <div class="description">
 <h1 id="detailName">Product Name</h1>
 <p id="detailDescription">Product information</p>
@@ -270,7 +282,6 @@ main{padding:12px}
 <div class="swatches" id="detailSwatches"></div>
 </div>
 </div>
-
 <div class="buybox">
 <div class="big-price" id="detailPrice">Price unavailable</div>
 <button class="buy" id="compareButton">Compare Retailers</button>
@@ -285,7 +296,6 @@ main{padding:12px}
 <button data-tab="history">Price History</button>
 <button data-tab="offers">Retailer Offers</button>
 </div>
-
 <div class="specbox" id="specificationsSection">
 <h2>Product Specifications</h2>
 <div id="detailSpecs"></div>
@@ -326,15 +336,18 @@ const SUPABASE_PUBLISHABLE_KEY='sb_publishable_JJnuK_K5Ji2T1h879q8agw_HGRGJ5O6';
 const db=window.supabase?.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 
 /* GETEAS FEEDBACK EMAIL */
-
 const FEEDBACK_EMAIL = 'YOUR_EMAIL_HERE';
-  
+
 let products=[],currentResults=[],baseResults=[],currentProduct=null;
 let recent=[],wishlist=[],compareList=[],recentViewed=[];
 
 const $=id=>document.getElementById(id);
 const input=$('searchInput');
 const panel=$('searchPanel');
+
+function setSearchVisibility(visible){
+document.querySelector('.search-wrap').style.display=visible?'flex':'none';
+}
 
 function readStore(key,fallback=[]){
 try{
@@ -721,6 +734,7 @@ $('simpleContent').innerHTML=list.length
 
 bindCards($('simpleContent'));
 
+setSearchVisibility(true);
 show('simplePage');
 nav('wishlist');
 }
@@ -998,18 +1012,34 @@ renderCompare();
 /* STATIC PAGES */
 function staticPage(page){
 
+setSearchVisibility(page!=='about'&&page!=='feedback');
+
 show('simplePage');
 nav(page);
 
 if(page==='about'){
 
-$('simpleTitle').textContent='About GETEAS';
+$('simpleTitle').textContent='';
 
 $('simpleContent').innerHTML=`
 <div class="about-panel">
+
+<h1 class="about-heading">
+About
+<img src="geteas-logo.png" alt="GETEAS Logo">
+</h1>
+
 <h2>Everything you need to find, all in one place.</h2>
-<p>GETEAS is a product discovery and comparison platform. It helps users discover products, explore specifications, compare genuine retailer offers and visit the original retailer to complete a purchase.</p>
-<p>GETEAS is not an online store and does not sell products. Retailer prices, stock and links will be shown only when verified data is connected.</p>
+
+<p>GETEAS is a product discovery and comparison platform. We bring products from different shopping platforms into one convenient place, helping you discover products, explore specifications, apply smart filters, compare retailers and track price changes without visiting multiple websites.</p>
+
+<p>We are not a shopping store and we do not sell products. GETEAS acts as a mediator between customers and retailers. Once you find the product you want, we take you to the original retailer to complete your purchase.</p>
+
+<div class="about-contact">
+<h3>Contact</h3>
+<p>Email: <a href="mailto:YOUR_EMAIL_HERE">YOUR_EMAIL_HERE</a></p>
+</div>
+
 </div>`;
 
 }
@@ -1123,6 +1153,7 @@ b.onclick=()=>{
 const p=b.dataset.page;
 
 if(p==='home'){
+setSearchVisibility(true);
 show('homePage');
 nav('home');
 }
