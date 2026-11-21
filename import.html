@@ -662,6 +662,299 @@ uploadButton.addEventListener("click", async () => {
     }
 
 });
+    // ======================================
+// GETEAS UNIVERSAL PRODUCT URL IMPORTER
+// ======================================
+
+const urlInput = document.getElementById("productUrls");
+const checkUrlsButton = document.getElementById("checkUrlsButton");
+const saveUrlsButton = document.getElementById("saveUrlsButton");
+const urlStatus = document.getElementById("urlStatus");
+const urlPreview = document.getElementById("urlPreview");
+
+let registeredRetailers = [];
+let checkedUrls = [];
+
+// Load registered retailers from Supabase
+async function loadRetailers() {
+
+    const { data, error } = await db
+        .from("retailers")
+        .select("id, name, website_url")
+        .eq("is_active", true);
+
+    if (error) {
+        urlStatus.textContent = "Could not load retailers: " + error.message;
+        return;
+    }
+
+    registeredRetailers = data.map(retailer => {
+
+        try {
+            const host = new URL(retailer.website_url).hostname
+                .toLowerCase()
+                .replace(/^www\./, "");
+
+            return { ...retailer, host };
+
+        } catch {
+            return null;
+        }
+
+    }).filter(Boolean);
+}
+
+// Normalize URLs
+function normalizeProductUrl(url) {
+
+    const parsed = new URL(url);
+
+    parsed.hash = "";
+
+    parsed.hostname = parsed.hostname
+        .toLowerCase()
+        .replace(/^www\./, "");
+
+    return parsed.toString().replace(/\/$/, "");
+}
+
+// Identify retailer
+function identifyRetailer(hostname) {
+
+    return registeredRetailers.find(retailer =>
+        hostname === retailer.host ||
+        hostname.endsWith("." + retailer.host)
+    );
+}
+
+// Extract product ID when recognizable
+function extractProductId(url, retailerName) {
+
+    if (retailerName.toLowerCase() === "amazon") {
+
+        const match = url.match(
+            /\/(?:dp|gp\/product)\/([A-Z0-9]{10})/i
+        );
+
+        return match ? match[1].toUpperCase() : null;
+    }
+
+    if (retailerName.toLowerCase() === "flipkart") {
+
+        try {
+            const parsed = new URL(url);
+            return parsed.searchParams.get("pid");
+        } catch {
+            return null;
+        }
+    }
+
+    return null;
+}
+
+// Check pasted URLs
+checkUrlsButton.addEventListener("click", async () => {
+
+    if (!adminReady) {
+        urlStatus.textContent = "Admin authentication is not ready.";
+        return;
+    }
+
+    await loadRetailers();
+
+    const lines = urlInput.value
+        .split(/\r?\n/)
+        .map(line => line.trim())
+        .filter(Boolean);
+
+    checkedUrls = [];
+    const seen = new Set();
+
+    let invalid = 0;
+    let duplicates = 0;
+
+    for (const originalUrl of lines) {
+
+        try {
+
+            const parsed = new URL(originalUrl);
+
+            if (!["http:", "https:"].includes(parsed.protocol)) {
+                throw new Error("Unsupported protocol");
+            }
+
+            const retailer = identifyRetailer(parsed.hostname);
+
+            if (!retailer) {
+                invalid++;
+                checkedUrls.push({
+                    originalUrl,
+                    valid: false,
+                    message: "Retailer not registered"
+                });
+                continue;
+            }
+
+            const normalized = normalizeProductUrl(originalUrl);
+
+            const duplicateKey = retailer.id + "|" + normalized;
+
+            if (seen.has(duplicateKey)) {
+                duplicates++;
+
+                checkedUrls.push({
+                    originalUrl,
+                    valid: false,
+                    message: "Duplicate URL"
+                });
+
+                continue;
+            }
+
+            seen.add(duplicateKey);
+
+            checkedUrls.push({
+                originalUrl,
+                normalized,
+                retailerId: retailer.id,
+                retailerName: retailer.name,
+                retailerSku: extractProductId(
+                    originalUrl,
+                    retailer.name
+                ),
+                valid: true,
+                message: "Valid"
+            });
+
+        } catch {
+
+            invalid++;
+
+            checkedUrls.push({
+                originalUrl,
+                valid: false,
+                message: "Invalid URL"
+            });
+
+        }
+
+    }
+
+    const validCount = checkedUrls.filter(item => item.valid).length;
+
+    urlPreview.innerHTML = "";
+
+    const table = document.createElement("table");
+    table.style.width = "100%";
+    table.style.marginTop = "15px";
+
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>Product URL</th>
+                <th>Retailer</th>
+                <th>Product ID</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    `;
+
+    const tbody = table.querySelector("tbody");
+
+    checkedUrls.slice(0, 100).forEach(item => {
+
+        const tr = document.createElement("tr");
+
+        [
+            item.originalUrl,
+            item.retailerName || "-",
+            item.retailerSku || "-",
+            item.message
+        ].forEach(value => {
+
+            const td = document.createElement("td");
+            td.textContent = value;
+            tr.appendChild(td);
+
+        });
+
+        tbody.appendChild(tr);
+
+    });
+
+    urlPreview.appendChild(table);
+
+    urlStatus.textContent =
+        `Total: ${lines.length} | Valid: ${validCount} | ` +
+        `Invalid: ${invalid} | Duplicates: ${duplicates}`;
+
+    saveUrlsButton.disabled = validCount === 0;
+
+});
+
+// Save URLs to Supabase queue
+saveUrlsButton.addEventListener("click", async () => {
+
+    if (!adminReady) return;
+
+    const valid = checkedUrls.filter(item => item.valid);
+
+    if (!valid.length) return;
+
+    if (!confirm(`Save ${valid.length} product URLs to GETEAS?`)) {
+        return;
+    }
+
+    saveUrlsButton.disabled = true;
+    checkUrlsButton.disabled = true;
+
+    const batchId = crypto.randomUUID();
+
+    const records = valid.map(item => ({
+        import_batch_id: batchId,
+        retailer_id: item.retailerId,
+        retailer_name: item.retailerName,
+        source_url: item.originalUrl,
+        normalized_url: item.normalized,
+        retailer_sku: item.retailerSku,
+        status: "pending"
+    }));
+
+    try {
+
+        const { data, error } = await db
+            .from("product_url_queue")
+            .insert(records)
+            .select("id");
+
+        if (error) throw error;
+
+        urlStatus.textContent =
+            `Success! ${data.length} URLs saved to the queue.`;
+
+        urlStatus.className = "success";
+
+        checkedUrls = [];
+
+    } catch (error) {
+
+        urlStatus.textContent =
+            "Could not save URLs: " + error.message;
+
+        urlStatus.className = "error";
+
+    } finally {
+
+        saveUrlsButton.disabled = true;
+        checkUrlsButton.disabled = false;
+
+    }
+
+});
+
+// Load retailers when page is ready
+loadRetailers();
 </script>
 
 </body>
