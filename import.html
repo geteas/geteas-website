@@ -730,7 +730,7 @@ function identifyRetailer(hostname) {
 // Extract product ID when recognizable
 function extractProductId(url, retailerName) {
 
-    if (retailerName.toLowerCase() === "amazon") {
+    if (retailerName.toLowerCase().includes("amazon")) {
 
         const match = url.match(
             /\/(?:dp|gp\/product)\/([A-Z0-9]{10})/i
