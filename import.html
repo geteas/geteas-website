@@ -199,7 +199,36 @@ th { color:var(--cyan); }
 
         <p id="fileInfo" class="note"></p>
     </div>
+<div class="card">
+    <h2>Universal Product URL Importer</h2>
 
+    <p class="note">
+        Paste product URLs from different retailers.
+        Enter one URL per line. GETEAS will identify the retailer automatically.
+    </p>
+
+    <textarea
+        id="productUrls"
+        rows="9"
+        placeholder="https://www.amazon.in/dp/XXXXXXXXXX
+https://www.flipkart.com/product-example
+https://www.myntra.com/product-example"
+        style="width:100%;padding:15px;background:#00170f;
+        color:white;border:1px solid #20d890;border-radius:8px;
+        font-family:Arial;font-size:14px;resize:vertical;">
+    </textarea>
+
+    <div class="actions">
+        <button id="checkUrlsButton">Check URLs</button>
+        <button id="saveUrlsButton" disabled>
+            Save URLs to Queue
+        </button>
+    </div>
+
+    <p id="urlStatus" class="note"></p>
+
+    <div id="urlPreview"></div>
+</div>
     <div class="card" id="previewSection" hidden>
 
         <h2>Import Preview</h2>
