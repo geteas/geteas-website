@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GETEAS | Admin Dashboard</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root {
+    --bg: #00170f;
+    --panel: #00251a;
+    --panel2: #003024;
+    --green: #35ef8b;
+    --cyan: #20d890;
+    --text: #f4fffb;
+    --muted: #a6c4ba;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, sans-serif;
+}
+
+header {
+    padding: 20px;
+    background: var(--panel);
+    border-bottom: 1px solid var(--green);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+header h1 {
+    color: var(--green);
+    margin: 0;
+}
+
+button {
+    padding: 11px 18px;
+    border: none;
+    border-radius: 6px;
+    background: var(--green);
+    color: #00170f;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.container {
+    padding: 25px;
+    max-width: 1100px;
+    margin: auto;
+}
+
+.welcome {
+    color: var(--muted);
+    margin-bottom: 25px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 18px;
+}
+
+.card {
+    padding: 25px;
+    background: var(--panel);
+    border: 1px solid var(--cyan);
+    border-radius: 12px;
+}
+
+.card h3 {
+    color: var(--cyan);
+    margin-top: 0;
+}
+
+.number {
+    font-size: 32px;
+    font-weight: bold;
+    color: var(--green);
+}
+
+#status {
+    color: var(--muted);
+    margin-top: 25px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>GETEAS ADMIN</h1>
+    <button id="logoutButton">Logout</button>
+</header>
+
+<div class="container">
+
+    <h2>Dashboard</h2>
+
+    <p class="welcome">
+        Welcome to the GETEAS Administration Portal.
+    </p>
+
+    <div class="grid">
+
+        <div class="card">
+            <h3>Total Products</h3>
+            <div class="number" id="products">--</div>
+        </div>
+
+        <div class="card">
+            <h3>Total Brands</h3>
+            <div class="number" id="brands">--</div>
+        </div>
+
+        <div class="card">
+            <h3>Total Categories</h3>
+            <div class="number" id="categories">--</div>
+        </div>
+
+        <div class="card">
+            <h3>Total Retailers</h3>
+            <div class="number" id="retailers">--</div>
+        </div>
+
+    </div>
+
+    <p id="status">Checking admin access...</p>
+
+</div>
+
+<script>
+const SUPABASE_URL =
+"https://jrlesafvdwwxrahtocqa.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_JJnuK_K5Ji2T1h879q8agw_HGRGJ5O6";
+
+const ADMIN_UID =
+"089ab93d-5ddc-42ae-b913-2766b26544c6";
+
+const db = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+async function startDashboard() {
+
+    const { data, error } = await db.auth.getUser();
+
+    if (error || !data.user || data.user.id !== ADMIN_UID) {
+        await db.auth.signOut();
+        window.location.replace("admin.html");
+        return;
+    }
+
+    document.getElementById("status").textContent =
+        "Admin access verified.";
+
+    loadCounts();
+}
+
+async function getCount(table) {
+
+    const { count, error } = await db
+        .from(table)
+        .select("*", { count: "exact", head: true });
+
+    if (error) {
+        console.error(table, error.message);
+        return "--";
+    }
+
+    return count;
+}
+
+async function loadCounts() {
+
+    document.getElementById("products").textContent =
+        await getCount("products");
+
+    document.getElementById("brands").textContent =
+        await getCount("brands");
+
+    document.getElementById("categories").textContent =
+        await getCount("categories");
+
+    document.getElementById("retailers").textContent =
+        await getCount("retailers");
+}
+
+document.getElementById("logoutButton")
+.addEventListener("click", async () => {
+
+    await db.auth.signOut();
+    window.location.replace("admin.html");
+
+});
+
+startDashboard();
+</script>
+
+</body>
+</html>
