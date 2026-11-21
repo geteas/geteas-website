@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GETEAS | Product Importer</title>
+<title>GETEAS | Bulk Product Importer</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
 <style>
 :root {
@@ -16,6 +17,7 @@
     --cyan:#20d890;
     --text:#f4fffb;
     --muted:#a6c4ba;
+    --red:#ff6565;
 }
 
 * { box-sizing:border-box; }
@@ -41,40 +43,20 @@ header {
 h1 { color:var(--green); margin:0; }
 
 .container {
-    max-width:850px;
+    max-width:1100px;
     margin:30px auto;
     padding:20px;
 }
 
-.form-box {
+.card {
     background:var(--panel);
     border:1px solid var(--cyan);
     border-radius:12px;
-    padding:25px;
+    padding:22px;
+    margin-bottom:22px;
 }
 
 h2 { color:var(--cyan); }
-
-label {
-    display:block;
-    margin:17px 0 8px;
-    font-weight:bold;
-}
-
-input,select,textarea {
-    width:100%;
-    padding:12px;
-    border:1px solid var(--cyan);
-    border-radius:7px;
-    background:var(--bg);
-    color:white;
-    font-size:15px;
-}
-
-textarea {
-    min-height:90px;
-    resize:vertical;
-}
 
 button {
     padding:12px 20px;
@@ -86,12 +68,9 @@ button {
     cursor:pointer;
 }
 
-button:disabled { opacity:.6; }
-
-.submit {
-    width:100%;
-    margin-top:25px;
-    font-size:16px;
+button:disabled {
+    opacity:.5;
+    cursor:not-allowed;
 }
 
 .secondary {
@@ -100,16 +79,91 @@ button:disabled { opacity:.6; }
     border:1px solid var(--green);
 }
 
-#status {
-    margin-top:18px;
-    line-height:1.5;
-    overflow-wrap:anywhere;
+input[type=file] {
+    width:100%;
+    padding:15px;
+    border:1px dashed var(--cyan);
+    border-radius:8px;
+    background:var(--bg);
+    color:white;
+    margin:15px 0;
 }
 
 .note {
     color:var(--muted);
+    line-height:1.6;
+    font-size:14px;
+}
+
+.stats {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+    gap:12px;
+}
+
+.stat {
+    background:var(--panel2);
+    padding:18px;
+    border-radius:8px;
+}
+
+.stat strong {
+    display:block;
+    font-size:25px;
+    color:var(--green);
+    margin-top:8px;
+}
+
+.table-wrap {
+    overflow-x:auto;
+    margin-top:15px;
+}
+
+table {
+    width:100%;
+    border-collapse:collapse;
+    min-width:750px;
+}
+
+th,td {
+    padding:12px;
+    text-align:left;
+    border-bottom:1px solid #205343;
     font-size:13px;
-    margin-top:6px;
+}
+
+th { color:var(--cyan); }
+
+.error { color:var(--red); }
+.success { color:var(--green); }
+
+#status {
+    margin-top:18px;
+    overflow-wrap:anywhere;
+    line-height:1.6;
+}
+
+.progress {
+    width:100%;
+    height:12px;
+    background:var(--panel2);
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:15px;
+}
+
+#progressBar {
+    height:100%;
+    width:0%;
+    background:var(--green);
+    transition:width .2s;
+}
+
+.actions {
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-top:18px;
 }
 </style>
 </head>
@@ -118,77 +172,113 @@ button:disabled { opacity:.6; }
 
 <header>
     <h1>GETEAS ADMIN</h1>
-    <button class="secondary" onclick="location.href='dashboard.html'">
+    <button class="secondary"
+        onclick="location.href='dashboard.html'">
         Dashboard
     </button>
 </header>
 
 <div class="container">
 
-<div class="form-box">
+    <div class="card">
+        <h2>Bulk Product Importer</h2>
 
-<h2>Product Importer</h2>
-<p class="note">Add a product directly to the GETEAS database.</p>
+        <p class="note">
+            Upload a CSV file containing your product catalogue.
+            Products will first be saved in a private staging area
+            for validation before publishing.
+        </p>
 
-<form id="productForm">
+        <input type="file" id="csvFile" accept=".csv,text/csv">
 
-<label>Product Name *</label>
-<input id="productName" required>
+        <div class="actions">
+            <button id="previewButton" disabled>
+                Preview Products
+            </button>
+        </div>
 
-<label>Brand</label>
-<select id="brand">
-<option value="">Loading brands...</option>
-</select>
+        <p id="fileInfo" class="note"></p>
+    </div>
 
-<label>Category *</label>
-<select id="category" required>
-<option value="">Loading categories...</option>
-</select>
+    <div class="card" id="previewSection" hidden>
 
-<label>Description</label>
-<textarea id="description"></textarea>
+        <h2>Import Preview</h2>
 
-<label>Model Number / ASIN</label>
-<input id="modelNumber">
+        <div class="stats">
+            <div class="stat">
+                Total Rows
+                <strong id="totalCount">0</strong>
+            </div>
 
-<label>Product Image URLs</label>
-<textarea id="images" placeholder="Paste one image URL per line"></textarea>
-<p class="note">You can add multiple image URLs, one per line.</p>
+            <div class="stat">
+                Valid Rows
+                <strong id="validCount">0</strong>
+            </div>
 
-<label>Retailer *</label>
-<select id="retailer" required>
-<option value="">Loading retailers...</option>
-</select>
+            <div class="stat">
+                Invalid Rows
+                <strong id="invalidCount">0</strong>
+            </div>
 
-<label>Retailer Product URL *</label>
-<input id="retailerUrl" type="url" required>
+            <div class="stat">
+                Duplicates
+                <strong id="duplicateCount">0</strong>
+            </div>
+        </div>
 
-<label>Retailer SKU</label>
-<input id="retailerSku">
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Brand</th>
+                        <th>Category</th>
+                        <th>Retailer</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="previewBody"></tbody>
+            </table>
+        </div>
 
-<label>Current Price (INR)</label>
-<input id="price" type="number" min="0" step="0.01">
+        <p id="moreRows" class="note"></p>
 
-<label>Availability</label>
-<select id="availability">
-<option value="unknown">Unknown</option>
-<option value="in_stock">In Stock</option>
-<option value="out_of_stock">Out of Stock</option>
-</select>
+        <div class="actions">
+            <button id="uploadButton" disabled>
+                Upload Valid Products
+            </button>
+        </div>
 
-<label>Specifications (JSON)</label>
-<textarea id="specifications"
-placeholder='Example: {"Colour":"Black","Battery":"40 hours"}'></textarea>
+        <div class="progress">
+            <div id="progressBar"></div>
+        </div>
 
-<button type="submit" class="submit" id="saveButton">
-Save Product
-</button>
+        <p id="status"></p>
+    </div>
 
-</form>
+    <div class="card">
+        <h2>Required CSV Columns</h2>
 
-<p id="status"></p>
+        <p class="note">
+            Your CSV must contain these column names.
+            Optional information can be left blank.
+        </p>
 
-</div>
+        <p class="note">
+            product_name, brand_name, category_name,
+            category_parent_name, description, model_number,
+            product_url, image_url, specifications_json,
+            retailer_name, retailer_sku, retailer_product_url,
+            current_price, currency, availability_status
+        </p>
+
+        <p class="note">
+            Required fields: product_name, category_name,
+            retailer_name and retailer_product_url.
+        </p>
+    </div>
+
 </div>
 
 <script>
@@ -207,6 +297,12 @@ const db = window.supabase.createClient(
 );
 
 let adminReady = false;
+let validRows = [];
+let parsedRows = [];
+
+const fileInput = document.getElementById("csvFile");
+const previewButton = document.getElementById("previewButton");
+const uploadButton = document.getElementById("uploadButton");
 
 async function initialize() {
 
@@ -219,232 +315,325 @@ async function initialize() {
     }
 
     adminReady = true;
-
-    await Promise.all([
-        loadBrands(),
-        loadCategories(),
-        loadRetailers()
-    ]);
 }
 
-async function loadBrands() {
+initialize();
 
-    const { data, error } = await db
-        .from("brands")
-        .select("id,name")
-        .eq("is_active", true)
-        .order("name");
+fileInput.addEventListener("change", () => {
 
-    const select = document.getElementById("brand");
+    const file = fileInput.files[0];
 
-    if (error) {
-        select.innerHTML = '<option value="">Could not load brands</option>';
-        return;
-    }
+    validRows = [];
+    parsedRows = [];
 
-    select.innerHTML = '<option value="">Select Brand</option>';
+    previewButton.disabled = !file || !adminReady;
+    uploadButton.disabled = true;
 
-    data.forEach(item => {
-        select.add(new Option(item.name, item.id));
-    });
-}
+    document.getElementById("previewSection").hidden = true;
+    document.getElementById("fileInfo").textContent =
+        file ? "Selected: " + file.name : "";
 
-async function loadCategories() {
+});
 
-    const { data, error } = await db
-        .from("categories")
-        .select("id,name,parent_id")
-        .eq("is_active", true)
-        .order("name");
+function validateRows(rows) {
 
-    const select = document.getElementById("category");
+    const seen = new Set();
 
-    if (error) {
-        select.innerHTML = '<option value="">Could not load categories</option>';
-        return;
-    }
+    return rows.map(row => {
 
-    const byId = new Map(data.map(item => [item.id, item]));
+        const clean = {};
 
-    select.innerHTML = '<option value="">Select Category</option>';
-
-    data.forEach(item => {
-
-        const parent = byId.get(item.parent_id);
-        const label = parent
-            ? parent.name + " → " + item.name
-            : item.name;
-
-        select.add(new Option(label, item.id));
-    });
-}
-
-async function loadRetailers() {
-
-    const { data, error } = await db
-        .from("retailers")
-        .select("id,name")
-        .eq("is_active", true)
-        .order("name");
-
-    const select = document.getElementById("retailer");
-
-    if (error) {
-        select.innerHTML = '<option value="">Could not load retailers</option>';
-        return;
-    }
-
-    select.innerHTML = '<option value="">Select Retailer</option>';
-
-    data.forEach(item => {
-        select.add(new Option(item.name, item.id));
-    });
-}
-
-document.getElementById("productForm")
-.addEventListener("submit", async function(e) {
-
-    e.preventDefault();
-
-    if (!adminReady) return;
-
-    const button = document.getElementById("saveButton");
-    const status = document.getElementById("status");
-
-    button.disabled = true;
-    status.textContent = "Saving product...";
-
-    try {
-
-        const name = document.getElementById("productName").value.trim();
-        const brandId = document.getElementById("brand").value;
-        const categoryId = document.getElementById("category").value;
-        const retailerId = document.getElementById("retailer").value;
-
-        const retailerUrl = document.getElementById("retailerUrl").value.trim();
-        const retailerSku = document.getElementById("retailerSku").value.trim();
-
-        const priceText = document.getElementById("price").value;
-        const price = priceText === "" ? null : Number(priceText);
-
-        if (price !== null && (!Number.isFinite(price) || price < 0)) {
-            throw new Error("Enter a valid price.");
-        }
-
-        const imageUrls = document.getElementById("images").value
-            .split(/\r?\n/)
-            .map(url => url.trim())
-            .filter(Boolean);
-
-        const invalidImage = imageUrls.find(url => {
-            try {
-                return !["http:", "https:"].includes(new URL(url).protocol);
-            } catch {
-                return true;
-            }
+        Object.keys(row).forEach(key => {
+            clean[key.trim().toLowerCase()] =
+                typeof row[key] === "string"
+                    ? row[key].trim()
+                    : row[key];
         });
 
-        if (invalidImage) {
-            throw new Error("One of the image URLs is invalid.");
+        let errors = [];
+
+        if (!clean.product_name)
+            errors.push("Missing product name");
+
+        if (!clean.category_name)
+            errors.push("Missing category");
+
+        if (!clean.retailer_name)
+            errors.push("Missing retailer");
+
+        if (!clean.retailer_product_url)
+            errors.push("Missing retailer product URL");
+
+        if (
+            clean.current_price &&
+            (
+                !Number.isFinite(Number(clean.current_price)) ||
+                Number(clean.current_price) < 0
+            )
+        ) {
+            errors.push("Invalid price");
         }
 
-        let specifications = {};
-
-        const specsText =
-            document.getElementById("specifications").value.trim();
-
-        if (specsText) {
+        if (clean.specifications_json) {
             try {
-                specifications = JSON.parse(specsText);
+                const specs = JSON.parse(clean.specifications_json);
+
                 if (
-                    specifications === null ||
-                    Array.isArray(specifications) ||
-                    typeof specifications !== "object"
+                    specs === null ||
+                    Array.isArray(specs) ||
+                    typeof specs !== "object"
                 ) {
                     throw new Error();
                 }
+
             } catch {
-                throw new Error("Specifications must contain valid JSON.");
+                errors.push("Invalid specifications JSON");
             }
         }
 
-        const { data: product, error: productError } = await db
-            .from("products")
-            .insert({
-                name,
-                brand_id: brandId || null,
-                category_id: Number(categoryId),
-                description: document.getElementById("description").value.trim(),
-                model_number: document.getElementById("modelNumber").value.trim() || null,
-                product_url: retailerUrl,
-                image_url: imageUrls[0] || null,
-                specifications
-            })
-            .select("id")
-            .single();
+        const sku = clean.retailer_sku;
 
-        if (productError) throw productError;
+        const duplicateKey = sku
+            ? clean.retailer_name.toLowerCase() + "|" + sku.toLowerCase()
+            : clean.retailer_name.toLowerCase() + "|" +
+              (clean.retailer_product_url || "").toLowerCase();
 
-        const { error: listingError } = await db
-            .from("product_listings")
-            .insert({
-                product_id: product.id,
-                retailer_id: Number(retailerId),
-                retailer_product_url: retailerUrl,
-                retailer_sku: retailerSku || null,
-                current_price: price,
-                currency: "INR",
-                availability_status: document.getElementById("availability").value,
-                is_active: true
+        let duplicate = seen.has(duplicateKey);
+
+        if (duplicate) {
+            errors.push("Duplicate within uploaded file");
+        } else {
+            seen.add(duplicateKey);
+        }
+
+        return {
+            clean,
+            errors,
+            valid: errors.length === 0
+        };
+
+    });
+}
+
+previewButton.addEventListener("click", () => {
+
+    const file = fileInput.files[0];
+
+    if (!file || !adminReady) return;
+
+    previewButton.disabled = true;
+
+    document.getElementById("status").textContent =
+        "Reading CSV file...";
+
+    Papa.parse(file, {
+
+        header: true,
+        skipEmptyLines: true,
+        transformHeader: header => header.trim(),
+
+        complete: function(results) {
+
+            parsedRows = results.data;
+
+            const checked = validateRows(parsedRows);
+
+            validRows = checked
+                .filter(item => item.valid)
+                .map(item => item.clean);
+
+            const invalidCount = checked.filter(
+                item => !item.valid
+            ).length;
+
+            const duplicateCount = checked.filter(
+                item => item.errors.some(
+                    error => error.includes("Duplicate")
+                )
+            ).length;
+
+            document.getElementById("totalCount").textContent =
+                checked.length;
+
+            document.getElementById("validCount").textContent =
+                validRows.length;
+
+            document.getElementById("invalidCount").textContent =
+                invalidCount;
+
+            document.getElementById("duplicateCount").textContent =
+                duplicateCount;
+
+            const tbody = document.getElementById("previewBody");
+
+            tbody.innerHTML = "";
+
+            checked.slice(0, 100).forEach(item => {
+
+                const row = item.clean;
+                const tr = document.createElement("tr");
+
+                const values = [
+                    row.product_name || "-",
+                    row.brand_name || "-",
+                    row.category_name || "-",
+                    row.retailer_name || "-",
+                    row.current_price || "-",
+                    item.valid ? "Valid" : item.errors.join("; ")
+                ];
+
+                values.forEach((value, index) => {
+
+                    const td = document.createElement("td");
+                    td.textContent = value;
+
+                    if (index === 5 && !item.valid)
+                        td.className = "error";
+
+                    tr.appendChild(td);
+
+                });
+
+                tbody.appendChild(tr);
+
             });
 
-        if (listingError) {
-            throw new Error(
-                "Product was created, but its retailer listing failed: " +
-                listingError.message
-            );
+            document.getElementById("moreRows").textContent =
+                checked.length > 100
+                ? "Showing first 100 rows. Total: " + checked.length
+                : "All rows displayed.";
+
+            document.getElementById("previewSection").hidden = false;
+
+            uploadButton.disabled = validRows.length === 0;
+
+            document.getElementById("status").textContent =
+                "Preview complete. Check the results before uploading.";
+
+            previewButton.disabled = false;
+
+        },
+
+        error: function(error) {
+
+            document.getElementById("status").textContent =
+                "CSV error: " + error.message;
+
+            previewButton.disabled = false;
+
         }
 
-        if (imageUrls.length > 0) {
+    });
 
-            const imageRows = imageUrls.map((url, index) => ({
-                product_id: product.id,
-                image_url: url,
-                is_primary: index === 0,
-                sort_order: index
+});
+
+uploadButton.addEventListener("click", async () => {
+
+    if (!adminReady || validRows.length === 0) return;
+
+    const confirmed = confirm(
+        "Upload " + validRows.length +
+        " valid product records to the private staging table?"
+    );
+
+    if (!confirmed) return;
+
+    uploadButton.disabled = true;
+    previewButton.disabled = true;
+
+    const status = document.getElementById("status");
+    const progressBar = document.getElementById("progressBar");
+
+    const batchId = crypto.randomUUID();
+
+    let uploaded = 0;
+
+    status.textContent = "Starting upload...";
+
+    try {
+
+        for (let i = 0; i < validRows.length; i += 100) {
+
+            const batch = validRows.slice(i, i + 100);
+
+            const records = batch.map(row => ({
+
+                import_batch_id: batchId,
+
+                product_name: row.product_name,
+                brand_name: row.brand_name || null,
+                category_name: row.category_name,
+                category_parent_name: row.category_parent_name || null,
+
+                description: row.description || null,
+                model_number: row.model_number || null,
+
+                product_url: row.product_url || null,
+                image_url: row.image_url || null,
+
+                specifications_json: row.specifications_json || null,
+
+                retailer_name: row.retailer_name,
+                retailer_sku: row.retailer_sku || null,
+                retailer_product_url: row.retailer_product_url,
+
+                current_price:
+                    row.current_price === "" ||
+                    row.current_price == null
+                    ? null
+                    : Number(row.current_price),
+
+                currency: row.currency || "INR",
+
+                availability_status:
+                    row.availability_status || "unknown",
+
+                import_status: "pending"
+
             }));
 
-            const { error: imageError } = await db
-                .from("product_images")
-                .insert(imageRows);
+            const { error } = await db
+                .from("product_import_staging")
+                .insert(records);
 
-            if (imageError) {
-                throw new Error(
-                    "Product and listing were saved, but image saving failed: " +
-                    imageError.message
-                );
-            }
+            if (error) throw error;
+
+            uploaded += batch.length;
+
+            const percentage =
+                Math.round(uploaded / validRows.length * 100);
+
+            progressBar.style.width = percentage + "%";
+
+            status.textContent =
+                "Uploaded " + uploaded + " of " +
+                validRows.length + " records...";
+
         }
 
-        status.textContent =
-            "Success! Product ID: " + product.id +
-            ". Product, retailer listing and images saved.";
-
-        document.getElementById("productForm").reset();
+        status.innerHTML =
+            '<span class="success">Success! ' +
+            uploaded +
+            ' product records uploaded to staging.</span>' +
+            '<br>Batch ID: ' + batchId;
 
     } catch (error) {
 
-        status.textContent = "Error: " + error.message;
+        status.innerHTML =
+            '<span class="error">Upload stopped: ' +
+            error.message +
+            '</span><br>Successfully uploaded before error: ' +
+            uploaded;
 
     } finally {
 
-        button.disabled = false;
+        uploadButton.disabled = false;
+        previewButton.disabled = false;
 
     }
-});
 
-initialize();
+});
 </script>
 
 </body>
-  </html>
+                                    </html>
