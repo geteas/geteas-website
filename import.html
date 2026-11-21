@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GETEAS | Product Importer</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root {
+    --bg:#00170f;
+    --panel:#00251a;
+    --panel2:#003024;
+    --green:#35ef8b;
+    --cyan:#20d890;
+    --text:#f4fffb;
+    --muted:#a6c4ba;
+}
+
+* { box-sizing:border-box; }
+
+body {
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:Arial,sans-serif;
+}
+
+header {
+    padding:20px;
+    background:var(--panel);
+    border-bottom:1px solid var(--green);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:12px;
+}
+
+h1 { color:var(--green); margin:0; }
+
+.container {
+    max-width:850px;
+    margin:30px auto;
+    padding:20px;
+}
+
+.form-box {
+    background:var(--panel);
+    border:1px solid var(--cyan);
+    border-radius:12px;
+    padding:25px;
+}
+
+h2 { color:var(--cyan); }
+
+label {
+    display:block;
+    margin:17px 0 8px;
+    font-weight:bold;
+}
+
+input,select,textarea {
+    width:100%;
+    padding:12px;
+    border:1px solid var(--cyan);
+    border-radius:7px;
+    background:var(--bg);
+    color:white;
+    font-size:15px;
+}
+
+textarea {
+    min-height:90px;
+    resize:vertical;
+}
+
+button {
+    padding:12px 20px;
+    border:none;
+    border-radius:7px;
+    background:var(--green);
+    color:var(--bg);
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:disabled { opacity:.6; }
+
+.submit {
+    width:100%;
+    margin-top:25px;
+    font-size:16px;
+}
+
+.secondary {
+    background:var(--panel2);
+    color:var(--green);
+    border:1px solid var(--green);
+}
+
+#status {
+    margin-top:18px;
+    line-height:1.5;
+    overflow-wrap:anywhere;
+}
+
+.note {
+    color:var(--muted);
+    font-size:13px;
+    margin-top:6px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>GETEAS ADMIN</h1>
+    <button class="secondary" onclick="location.href='dashboard.html'">
+        Dashboard
+    </button>
+</header>
+
+<div class="container">
+
+<div class="form-box">
+
+<h2>Product Importer</h2>
+<p class="note">Add a product directly to the GETEAS database.</p>
+
+<form id="productForm">
+
+<label>Product Name *</label>
+<input id="productName" required>
+
+<label>Brand</label>
+<select id="brand">
+<option value="">Loading brands...</option>
+</select>
+
+<label>Category *</label>
+<select id="category" required>
+<option value="">Loading categories...</option>
+</select>
+
+<label>Description</label>
+<textarea id="description"></textarea>
+
+<label>Model Number / ASIN</label>
+<input id="modelNumber">
+
+<label>Product Image URLs</label>
+<textarea id="images" placeholder="Paste one image URL per line"></textarea>
+<p class="note">You can add multiple image URLs, one per line.</p>
+
+<label>Retailer *</label>
+<select id="retailer" required>
+<option value="">Loading retailers...</option>
+</select>
+
+<label>Retailer Product URL *</label>
+<input id="retailerUrl" type="url" required>
+
+<label>Retailer SKU</label>
+<input id="retailerSku">
+
+<label>Current Price (INR)</label>
+<input id="price" type="number" min="0" step="0.01">
+
+<label>Availability</label>
+<select id="availability">
+<option value="unknown">Unknown</option>
+<option value="in_stock">In Stock</option>
+<option value="out_of_stock">Out of Stock</option>
+</select>
+
+<label>Specifications (JSON)</label>
+<textarea id="specifications"
+placeholder='Example: {"Colour":"Black","Battery":"40 hours"}'></textarea>
+
+<button type="submit" class="submit" id="saveButton">
+Save Product
+</button>
+
+</form>
+
+<p id="status"></p>
+
+</div>
+</div>
+
+<script>
+const SUPABASE_URL =
+"https://jrlesafvdwwxrahtocqa.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_JJnuK_K5Ji2T1h879q8agw_HGRGJ5O6";
+
+const ADMIN_UID =
+"089ab93d-5ddc-42ae-b913-2766b26544c6";
+
+const db = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+let adminReady = false;
+
+async function initialize() {
+
+    const { data, error } = await db.auth.getUser();
+
+    if (error || !data.user || data.user.id !== ADMIN_UID) {
+        await db.auth.signOut();
+        location.replace("admin.html");
+        return;
+    }
+
+    adminReady = true;
+
+    await Promise.all([
+        loadBrands(),
+        loadCategories(),
+        loadRetailers()
+    ]);
+}
+
+async function loadBrands() {
+
+    const { data, error } = await db
+        .from("brands")
+        .select("id,name")
+        .eq("is_active", true)
+        .order("name");
+
+    const select = document.getElementById("brand");
+
+    if (error) {
+        select.innerHTML = '<option value="">Could not load brands</option>';
+        return;
+    }
+
+    select.innerHTML = '<option value="">Select Brand</option>';
+
+    data.forEach(item => {
+        select.add(new Option(item.name, item.id));
+    });
+}
+
+async function loadCategories() {
+
+    const { data, error } = await db
+        .from("categories")
+        .select("id,name,parent_id")
+        .eq("is_active", true)
+        .order("name");
+
+    const select = document.getElementById("category");
+
+    if (error) {
+        select.innerHTML = '<option value="">Could not load categories</option>';
+        return;
+    }
+
+    const byId = new Map(data.map(item => [item.id, item]));
+
+    select.innerHTML = '<option value="">Select Category</option>';
+
+    data.forEach(item => {
+
+        const parent = byId.get(item.parent_id);
+        const label = parent
+            ? parent.name + " → " + item.name
+            : item.name;
+
+        select.add(new Option(label, item.id));
+    });
+}
+
+async function loadRetailers() {
+
+    const { data, error } = await db
+        .from("retailers")
+        .select("id,name")
+        .eq("is_active", true)
+        .order("name");
+
+    const select = document.getElementById("retailer");
+
+    if (error) {
+        select.innerHTML = '<option value="">Could not load retailers</option>';
+        return;
+    }
+
+    select.innerHTML = '<option value="">Select Retailer</option>';
+
+    data.forEach(item => {
+        select.add(new Option(item.name, item.id));
+    });
+}
+
+document.getElementById("productForm")
+.addEventListener("submit", async function(e) {
+
+    e.preventDefault();
+
+    if (!adminReady) return;
+
+    const button = document.getElementById("saveButton");
+    const status = document.getElementById("status");
+
+    button.disabled = true;
+    status.textContent = "Saving product...";
+
+    try {
+
+        const name = document.getElementById("productName").value.trim();
+        const brandId = document.getElementById("brand").value;
+        const categoryId = document.getElementById("category").value;
+        const retailerId = document.getElementById("retailer").value;
+
+        const retailerUrl = document.getElementById("retailerUrl").value.trim();
+        const retailerSku = document.getElementById("retailerSku").value.trim();
+
+        const priceText = document.getElementById("price").value;
+        const price = priceText === "" ? null : Number(priceText);
+
+        if (price !== null && (!Number.isFinite(price) || price < 0)) {
+            throw new Error("Enter a valid price.");
+        }
+
+        const imageUrls = document.getElementById("images").value
+            .split(/\r?\n/)
+            .map(url => url.trim())
+            .filter(Boolean);
+
+        const invalidImage = imageUrls.find(url => {
+            try {
+                return !["http:", "https:"].includes(new URL(url).protocol);
+            } catch {
+                return true;
+            }
+        });
+
+        if (invalidImage) {
+            throw new Error("One of the image URLs is invalid.");
+        }
+
+        let specifications = {};
+
+        const specsText =
+            document.getElementById("specifications").value.trim();
+
+        if (specsText) {
+            try {
+                specifications = JSON.parse(specsText);
+                if (
+                    specifications === null ||
+                    Array.isArray(specifications) ||
+                    typeof specifications !== "object"
+                ) {
+                    throw new Error();
+                }
+            } catch {
+                throw new Error("Specifications must contain valid JSON.");
+            }
+        }
+
+        const { data: product, error: productError } = await db
+            .from("products")
+            .insert({
+                name,
+                brand_id: brandId || null,
+                category_id: Number(categoryId),
+                description: document.getElementById("description").value.trim(),
+                model_number: document.getElementById("modelNumber").value.trim() || null,
+                product_url: retailerUrl,
+                image_url: imageUrls[0] || null,
+                specifications
+            })
+            .select("id")
+            .single();
+
+        if (productError) throw productError;
+
+        const { error: listingError } = await db
+            .from("product_listings")
+            .insert({
+                product_id: product.id,
+                retailer_id: Number(retailerId),
+                retailer_product_url: retailerUrl,
+                retailer_sku: retailerSku || null,
+                current_price: price,
+                currency: "INR",
+                availability_status: document.getElementById("availability").value,
+                is_active: true
+            });
+
+        if (listingError) {
+            throw new Error(
+                "Product was created, but its retailer listing failed: " +
+                listingError.message
+            );
+        }
+
+        if (imageUrls.length > 0) {
+
+            const imageRows = imageUrls.map((url, index) => ({
+                product_id: product.id,
+                image_url: url,
+                is_primary: index === 0,
+                sort_order: index
+            }));
+
+            const { error: imageError } = await db
+                .from("product_images")
+                .insert(imageRows);
+
+            if (imageError) {
+                throw new Error(
+                    "Product and listing were saved, but image saving failed: " +
+                    imageError.message
+                );
+            }
+        }
+
+        status.textContent =
+            "Success! Product ID: " + product.id +
+            ". Product, retailer listing and images saved.";
+
+        document.getElementById("productForm").reset();
+
+    } catch (error) {
+
+        status.textContent = "Error: " + error.message;
+
+    } finally {
+
+        button.disabled = false;
+
+    }
+});
+
+initialize();
+</script>
+
+</body>
+  </html>
