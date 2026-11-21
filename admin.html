@@ -1,1 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GETEAS | Admin Login</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root {
+    --bg: #00170f;
+    --panel: #00251a;
+    --green: #35ef8b;
+    --cyan: #20d890;
+    --text: #f4fffb;
+    --muted: #a6c4ba;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, sans-serif;
+}
+
+.login-box {
+    width: 90%;
+    max-width: 400px;
+    padding: 35px;
+    background: var(--panel);
+    border: 1px solid var(--green);
+    border-radius: 15px;
+    box-shadow: 0 0 22px #00d6a333;
+}
+
+h1 {
+    text-align: center;
+    color: var(--green);
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    text-align: center;
+    color: var(--muted);
+    margin-bottom: 30px;
+}
+
+label {
+    display: block;
+    margin: 15px 0 8px;
+}
+
+input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid var(--cyan);
+    border-radius: 7px;
+    background: #00170f;
+    color: white;
+    outline: none;
+}
+
+button {
+    width: 100%;
+    margin-top: 22px;
+    padding: 13px;
+    border: none;
+    border-radius: 7px;
+    background: var(--green);
+    color: #00170f;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:disabled {
+    opacity: 0.6;
+}
+
+#message {
+    text-align: center;
+    margin-top: 18px;
+    color: var(--cyan);
+}
+</style>
+</head>
+
+<body>
+
+<div class="login-box">
+    <h1>GETEAS</h1>
+    <p class="subtitle">Administration Portal</p>
+
+    <form id="loginForm">
+        <label>Email Address</label>
+        <input type="email" id="email" required>
+
+        <label>Password</label>
+        <input type="password" id="password" required>
+
+        <button type="submit" id="loginButton">
+            Sign In
+        </button>
+    </form>
+
+    <p id="message"></p>
+</div>
+
+<script>
+const SUPABASE_URL =
+"https://jrlesafvdwwxrahtocqa.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_JJnuK_K5Ji2T1h879q8agw_HGRGJ5O6";
+
+const ADMIN_UID =
+"089ab93d-5ddc-42ae-b913-2766b26544c6";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+document.getElementById("loginForm")
+.addEventListener("submit", async function(e) {
+
+    e.preventDefault();
+
+    const message = document.getElementById("message");
+    const button = document.getElementById("loginButton");
+
+    button.disabled = true;
+    message.textContent = "Checking login...";
+
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    const { data, error } =
+    await supabaseClient.auth.signInWithPassword({
+        email,
+        password
+    });
+
+    if (error) {
+        message.textContent = error.message;
+        button.disabled = false;
+        return;
+    }
+
+    if (data.user.id !== ADMIN_UID) {
+        await supabaseClient.auth.signOut();
+
+        message.textContent = "Access denied.";
+        button.disabled = false;
+        return;
+    }
+
+    message.textContent = "Login successful!";
+
+    window.location.href = "dashboard.html";
+});
+</script>
+
+</body>
+</html>
